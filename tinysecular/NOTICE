@@ -1,0 +1,3 @@
+Independent MIT implementation of published first-order orbit-averaged J2 secular equations. No reference implementation source is incorporated.
+
+Vallado, Fundamentals of Astrodynamics and Applications, 2022, pp. 715–717, Algorithm 66, is the reference for the explicitly selected PKEPLER mean-anomaly convention. Compared against CelesTrak/fundamentals-of-astrodynamics Python at revision 49df0479c950917c0a2c5ac31f2db6477bba57f6. The averaged-J2 mean-anomaly correction is independently verified by numerical quadrature of Gauss variational equations (SciPy 1.18.1).
