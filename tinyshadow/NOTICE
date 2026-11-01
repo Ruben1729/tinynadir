@@ -1,0 +1,3 @@
+tinyshadow is an independently written MIT implementation from published mathematics.
+No reference library source is linked into the runtime.
+120 independent SciPy adaptive numerical integrals of apparent-disc intersections validate fraction to5e-8 absolute;128 SciPy bounded-minimization ellipsoid segment cases validate visibility. A SciPy Brent threshold event and analytic cylindrical cases add independent checks. Raw numerical integration tolerances/cases and maximum errors stay in ignored validation. References: https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.quad.html and https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.brentq.html .
