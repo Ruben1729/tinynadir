@@ -1,0 +1,3 @@
+tinytle is an independently written MIT implementation from published mathematics.
+No reference library source is linked into the runtime.
+Frozen independent python-sgp4/Vallado C++ outputs cover numeric/Alpha-5 ids, epoch pivots, near-Earth/deep-space states and positive/negative times. Regression position/velocity tolerances1mm/1e-5m/s. Additional short buffers, checksum, invalid identifiers/epochs and XP-rejection cases test atomicity. Reference: https://github.com/brandon-rhodes/python-sgp4 and https://www.space-track.org/documentation#/tle-alpha5 .
