@@ -1,0 +1,7 @@
+tinygibbs is independently implemented from published mathematical methods.
+No AGPL source was translated or included. Vallado Python at commit
+49df0479c950917c0a2c5ac31f2db6477bba57f6 was executed only as an oracle.
+Source: https://github.com/CelesTrak/fundamentals-of-astrodynamics/tree/49df0479c950917c0a2c5ac31f2db6477bba57f6
+Frozen numerical outputs are in tests/data/reference.h. Reference code,
+generators and raw comparison outputs stay ignored under .validation/tinygibbs/.
+No external reference implementation is required for normal builds or tests.
