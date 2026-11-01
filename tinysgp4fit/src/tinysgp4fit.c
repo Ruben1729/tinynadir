@@ -61,7 +61,8 @@ tinysgp4fit_status tinysgp4fit_fit(const tinytle_elements *seed,const tinysgp4fi
     if(status==TINYBATCHLS_NO_CONVERGENCE)return TINYSGP4FIT_NO_CONVERGENCE;
     if(status!=TINYBATCHLS_OK)return TINYSGP4FIT_INVALID;
     if(!decode(fit.parameters,&context,&result.elements))return TINYSGP4FIT_MODEL_ERROR;
-    for(i=0;i<7;++i)derivative[i]=1;derivative[2]=result.elements.eccentricity*(1-result.elements.eccentricity);derivative[5]=result.elements.mean_motion_rev_day;
+    for(i=0;i<7;++i)derivative[i]=1;
+    derivative[2]=result.elements.eccentricity*(1-result.elements.eccentricity);derivative[5]=result.elements.mean_motion_rev_day;
     for(i=0;i<n;++i)for(j=0;j<n;++j){result.covariance[n*i+j]=(derivative[i]*fit.covariance[n*i+j])*derivative[j];if(!isfinite(result.covariance[n*i+j]))return TINYSGP4FIT_INVALID;}
     result.weighted_sum_squares=fit.weighted_sum_squares;result.normalized_rms=sqrt(fit.weighted_sum_squares/(double)m);
     result.parameter_count=n;result.scalar_observation_count=m;result.iterations=fit.iterations;result.model_evaluations=fit.model_evaluations;

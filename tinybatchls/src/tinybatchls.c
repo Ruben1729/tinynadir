@@ -70,6 +70,7 @@ tinybatchls_status tinybatchls_solve(const tinybatchls_options *o,tinybatchls_mo
     if(!converged)return TINYBATCHLS_NO_CONVERGENCE;
     status=linearize(o,model,context,x,y,sigma,w,&evaluations);if(status!=TINYBATCHLS_OK)return status;
     for(j=0;j<n;++j){for(i=0;i<n*n;++i)w->factor[i]=w->normal[i];for(i=0;i<n;++i)w->delta[i]=i==j ? 1 : 0;if(!solve(n,w->factor,w->delta))return TINYBATCHLS_RANK_DEFICIENT;for(i=0;i<n;++i){result.covariance[n*i+j]=(o->parameter_scale[i]*w->delta[i])*o->parameter_scale[j];if(!isfinite(result.covariance[n*i+j]))return TINYBATCHLS_INVALID;}}
-    for(i=0;i<n;++i)result.parameters[i]=x[i];result.weighted_sum_squares=chi;result.iterations=iteration+1;result.model_evaluations=evaluations;
+    for(i=0;i<n;++i)result.parameters[i]=x[i];
+    result.weighted_sum_squares=chi;result.iterations=iteration+1;result.model_evaluations=evaluations;
     *out=result;return TINYBATCHLS_OK;
 }

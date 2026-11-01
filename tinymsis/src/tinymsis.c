@@ -23,7 +23,8 @@ tinymsis_status tinymsis_evaluate(const tinymsis_input *in,const int switches[24
     model.g_lat=in->latitude_rad*(180/3.141592653589793238462643383279502884);
     model.g_long=remainder(in->longitude_rad,6.28318530717958647693)*(180/3.141592653589793238462643383279502884);
     model.lst=in->local_solar_time_hours;model.f107A=in->f107_mean;model.f107=in->f107;model.ap=in->ap[0];
-    for(i=0;i<7;i++)ap.a[i]=in->ap[i];model.ap_a=&ap;
+    for(i=0;i<7;i++)ap.a[i]=in->ap[i];
+    model.ap_a=&ap;
     if(in->effective_drag_density)tinymsis_core_gtd7d(ctx,&model,&flags,&result);else tinymsis_core_gtd7(ctx,&model,&flags,&result);
     if(ctx->numeric_error)return TINYMSIS_ARITHMETIC;
     for(i=0;i<8;i++){r.number_density_m3[i]=result.d[index[i]];if(!isfinite(r.number_density_m3[i])||r.number_density_m3[i]<0)return TINYMSIS_ARITHMETIC;}

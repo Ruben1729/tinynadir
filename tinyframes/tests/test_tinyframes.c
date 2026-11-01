@@ -26,6 +26,9 @@ int main(void) {
     CHECK(tinyframes_matrix(&bad,TINYFRAMES_GCRF,TINYFRAMES_ITRF,TINYFRAMES_IAU2006A,a)==TINYFRAMES_RANGE);CHECK(!memcmp(before,a,sizeof a));
     CHECK(tinyframes_matrix(NULL,TINYFRAMES_GCRF,TINYFRAMES_ITRF,TINYFRAMES_IAU2006A,a)==TINYFRAMES_INVALID);
     CHECK(tinyframes_matrix(&epochs[0],(tinyframes_frame)99,TINYFRAMES_ITRF,TINYFRAMES_IAU2006A,a)==TINYFRAMES_RANGE);
+    CHECK(tinyframes_matrix(&epochs[0],(tinyframes_frame)-1,TINYFRAMES_ITRF,TINYFRAMES_IAU2006A,a)==TINYFRAMES_RANGE);CHECK(!memcmp(before,a,sizeof a));
+    CHECK(tinyframes_matrix(&epochs[0],TINYFRAMES_GCRF,(tinyframes_frame)-1,TINYFRAMES_IAU2006A,a)==TINYFRAMES_RANGE);CHECK(!memcmp(before,a,sizeof a));
+    CHECK(tinyframes_matrix(&epochs[0],TINYFRAMES_GCRF,TINYFRAMES_ITRF,(tinyframes_model)-1,a)==TINYFRAMES_RANGE);CHECK(!memcmp(before,a,sizeof a));
     printf("tinyframes: %zu ERFA matrices, %zu state cases and inverse/invalid checks pass; max matrix error %.9g\n",sizeof references/sizeof references[0],sizeof state_cases/sizeof state_cases[0],maximum);
     return 0;
 }

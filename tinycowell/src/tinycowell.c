@@ -5,7 +5,8 @@
 #include <string.h>
 static int valid(const tinycowell_model *m,const tinycowell_state *s){
     if(!m||!s||!isfinite(m->mu_m3_s2)||m->mu_m3_s2<0||(!m->mu_m3_s2&&!m->force))return 0;
-    for(size_t i=0;i<3;++i)if(!isfinite(s->position_m[i])||!isfinite(s->velocity_m_s[i]))return 0;return 1;
+    for(size_t i=0;i<3;++i)if(!isfinite(s->position_m[i])||!isfinite(s->velocity_m_s[i]))return 0;
+    return 1;
 }
 static int derivative(double t,const double *y,size_t n,void *context,double *dy){
     const tinycowell_model *m=(const tinycowell_model*)context;tinycowell_state s;double a[3]={0,0,0},norm,factor=0;(void)n;

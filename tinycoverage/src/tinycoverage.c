@@ -94,5 +94,6 @@ tinycoverage_status tinycoverage_scan(tinycoverage_margin_fn fn,void *ctx,double
         inside=entering;t=next;f=value;
     }
     if(inside){if(used>=capacity)return TINYCOVERAGE_CAPACITY;scratch->intervals[used].entry_s=opened;scratch->intervals[used++].exit_s=end;}
-    for(i=0;i<used;i++)out[i]=scratch->intervals[i];*count=used;*calls=invocations;return TINYCOVERAGE_OK;
+    for(i=0;i<used;i++)out[i]=scratch->intervals[i];
+    *count=used;*calls=invocations;return TINYCOVERAGE_OK;
 }

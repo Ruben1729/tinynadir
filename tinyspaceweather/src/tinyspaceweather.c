@@ -14,5 +14,6 @@ tinyspaceweather_status tinyspaceweather_interpolate(const tinyspaceweather_samp
     r.f107_sfu=(1-fraction)*table[lo].f107_sfu+fraction*table[hi].f107_sfu;
     r.f107_average_sfu=(1-fraction)*table[lo].f107_average_sfu+fraction*table[hi].f107_average_sfu;
     r.ap=(1-fraction)*table[lo].ap+fraction*table[hi].ap;
-    if(!isfinite(span)||!isfinite(r.f107_sfu)||!isfinite(r.f107_average_sfu)||!isfinite(r.ap))return TINYSPACEWEATHER_ARITHMETIC;*out=r;return TINYSPACEWEATHER_OK;
+    if(!isfinite(span)||!isfinite(r.f107_sfu)||!isfinite(r.f107_average_sfu)||!isfinite(r.ap))return TINYSPACEWEATHER_ARITHMETIC;
+    *out=r;return TINYSPACEWEATHER_OK;
 }

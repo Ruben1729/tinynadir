@@ -38,7 +38,8 @@ tinygravity_status tinygravity_evaluate(double mu,double radius,unsigned degree,
     if(!required||order>degree||!r||!out||!c||!s||count<required||!work||work_count<8*required||!isfinite(mu)||mu<=0||!isfinite(radius)||radius<=0)return TINYGRAVITY_INVALID;
     for(size_t i=0;i<required;++i)if(!isfinite(c[i])||!isfinite(s[i]))return TINYGRAVITY_INVALID;
     r2=constant(0);for(size_t i=0;i<3;++i){if(!isfinite(r[i]))return TINYGRAVITY_INVALID;x[i]=constant(r[i]/radius);x[i].d[i]=1;r2=add(r2,multiply(x[i],x[i]));}
-    if(r2.v==0)return TINYGRAVITY_SINGULAR;if(!isfinite(r2.v))return TINYGRAVITY_ARITHMETIC;
+    if(r2.v==0)return TINYGRAVITY_SINGULAR;
+    if(!isfinite(r2.v))return TINYGRAVITY_ARITHMETIC;
     inverse=reciprocal(r2);u=multiply(x[0],inverse);v=multiply(x[1],inverse);z=multiply(x[2],inverse);ww=work+4*required;
     store(vw,0,reciprocal(root(r2)));store(ww,0,constant(0));
     for(unsigned n=1;n<=degree;++n)for(unsigned m=0;m<=n&&m<=order;++m){dual a,b;
@@ -48,5 +49,6 @@ tinygravity_status tinygravity_evaluate(double mu,double radius,unsigned degree,
     }
     total=constant(0);for(unsigned n=0;n<=degree;++n)for(unsigned m=0;m<=n&&m<=order;++m){size_t k=index_nm(n,m);total=add(total,add(scale(load(vw,k),c[k]),scale(load(ww,k),s[k])));}
     p=(mu/radius)*total.v;for(size_t i=0;i<3;++i){accel[i]=(mu/radius/radius)*total.d[i];if(!isfinite(accel[i]))return TINYGRAVITY_ARITHMETIC;}
-    if(!isfinite(p))return TINYGRAVITY_ARITHMETIC;memcpy(out,accel,sizeof accel);if(potential)*potential=p;return TINYGRAVITY_OK;
+    if(!isfinite(p))return TINYGRAVITY_ARITHMETIC;
+    memcpy(out,accel,sizeof accel);if(potential)*potential=p;return TINYGRAVITY_OK;
 }

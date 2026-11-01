@@ -25,7 +25,8 @@ static int identifier(const char *s,uint32_t *id){
 tinytle_status tinytle_parse(const char *a,size_t na,const char *b,size_t nb,tinytle_elements *out){
     tinytle_elements g;uint32_t id2;double yy,day;int year;double maximum;tinytime_jd jan,next,epoch;
     if(!out||!line_valid(a,na,'1')||!line_valid(b,nb,'2')||!identifier(a+2,&g.catalog_id)||!identifier(b+2,&id2)||id2!=g.catalog_id)return TINYTLE_INVALID;
-    if(a[62]!='0')return TINYTLE_UNSUPPORTED;g.ephemeris_type=0;
+    if(a[62]!='0')return TINYTLE_UNSUPPORTED;
+    g.ephemeris_type=0;
     if(a[18]<'0'||a[18]>'9'||a[19]<'0'||a[19]>'9'||!decimal(a+18,2,0,&yy)||!decimal(a+20,12,0,&day)||!exponential(a+53,&g.bstar)||!decimal(b+8,8,0,&g.inclination_deg)||!decimal(b+17,8,0,&g.raan_deg)||!decimal(b+26,7,1,&g.eccentricity)||!decimal(b+34,8,0,&g.arg_perigee_deg)||!decimal(b+43,8,0,&g.mean_anomaly_deg)||!decimal(b+52,11,0,&g.mean_motion_rev_day))return TINYTLE_INVALID;
     year=(int)yy;year+=year<57?2000:1900;
     if(tinytime_calendar_to_jd(year,1,1,0,0,0,&jan)!=0||tinytime_calendar_to_jd(year+1,1,1,0,0,0,&next)!=0)return TINYTLE_INVALID;

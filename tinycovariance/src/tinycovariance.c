@@ -18,7 +18,8 @@ tinycovariance_status tinycovariance_transform(size_t n,size_t m,const double *J
     for(i=0;i<m*n;++i)if(!isfinite(J[i]))return TINYCOVARIANCE_INVALID;
     for(i=0;i<m;++i)for(j=0;j<n;++j){double value=0;for(k=0;k<n;++k)value+=J[n*i+k]*P[n*k+j];if(!isfinite(value))return TINYCOVARIANCE_INVALID;temp[n*i+j]=value;}
     for(i=0;i<m;++i)for(j=0;j<=i;++j){double value=0;for(k=0;k<n;++k)value+=temp[n*i+k]*J[n*j+k];if(!isfinite(value))return TINYCOVARIANCE_INVALID;if(i==j&&value<0)return TINYCOVARIANCE_NOT_PSD;result[m*i+j]=value;result[m*j+i]=value;}
-    for(i=0;i<m*m;++i)out[i]=result[i];return TINYCOVARIANCE_OK;
+    for(i=0;i<m*m;++i)out[i]=result[i];
+    return TINYCOVARIANCE_OK;
 }
 tinycovariance_status tinycovariance_jacobian(size_t n,size_t m,const double *input,const double *step,const double *period,tinycovariance_model model,void *context,double *out)
 {
@@ -27,7 +28,8 @@ tinycovariance_status tinycovariance_jacobian(size_t n,size_t m,const double *in
     for(i=0;i<n;++i)if(!isfinite(input[i])||!isfinite(step[i])||step[i]<=0||!isfinite(input[i]+step[i])||!isfinite(input[i]-step[i])||input[i]+step[i]==input[i]||input[i]-step[i]==input[i])return TINYCOVARIANCE_INVALID;
     if(period)for(i=0;i<m;++i)if(!isfinite(period[i])||period[i]<0)return TINYCOVARIANCE_INVALID;
     for(j=0;j<n;++j){for(i=0;i<n;++i)x[i]=input[i];for(i=0;i<m;++i){plus[i]=NAN;minus[i]=NAN;}x[j]=input[j]+step[j];if(!model(x,n,plus,m,context))return TINYCOVARIANCE_MODEL_ERROR;x[j]=input[j]-step[j];if(!model(x,n,minus,m,context))return TINYCOVARIANCE_MODEL_ERROR;for(i=0;i<m;++i){double difference;if(!isfinite(plus[i])||!isfinite(minus[i]))return TINYCOVARIANCE_MODEL_ERROR;difference=plus[i]-minus[i];if(period&&period[i]>0)difference=remainder(difference,period[i]);J[i*n+j]=difference/(2*step[j]);if(!isfinite(J[i*n+j]))return TINYCOVARIANCE_INVALID;}}
-    for(i=0;i<m*n;++i)out[i]=J[i];return TINYCOVARIANCE_OK;
+    for(i=0;i<m*n;++i)out[i]=J[i];
+    return TINYCOVARIANCE_OK;
 }
 tinycovariance_status tinycovariance_rotate_state(const double R[9],const double P[36],double out[36])
 {
@@ -58,7 +60,9 @@ static tinycovariance_status orbit_cov(double mu,int mode,const double x[6],cons
     else {for(i=0;i<6;++i)steps[i]=h*fmax(1,fabs(x[i]));if(mode==1){if(x[1]<1e-8||fabs(sin(x[2]))<1e-8)return TINYCOVARIANCE_SINGULAR;steps[0]=fmin(steps[0],.25*x[0]);steps[1]=fmin(steps[1],.25*x[1]);steps[2]=fmin(steps[2],.25*fmin(x[2],TC_PI-x[2]));}}
     status=tinycovariance_jacobian(6,6,x,steps,periods,orbit_model,&context,J);if(status!=TINYCOVARIANCE_OK)return status;
     status=tinycovariance_transform(6,6,J,P,result);if(status!=TINYCOVARIANCE_OK)return status;
-    for(i=0;i<6;++i)y[i]=value[i];for(i=0;i<36;++i)out[i]=result[i];return TINYCOVARIANCE_OK;
+    for(i=0;i<6;++i)y[i]=value[i];
+    for(i=0;i<36;++i)out[i]=result[i];
+    return TINYCOVARIANCE_OK;
 }
 tinycovariance_status tinycovariance_cartesian_to_classical(double mu,const tinyelements_state *s,const double P[36],tinyelements_classical *out,double Pc[36])
 {

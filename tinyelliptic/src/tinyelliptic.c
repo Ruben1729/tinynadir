@@ -105,11 +105,13 @@ tinyelliptic_status tinyelliptic_arc(double a,double b,double start,double end,d
     double major,ratio,m,offset,n0,n1,r0,r1,e0,e1,complete,result;
     if(!length||!isfinite(a)||a<=0||!isfinite(b)||b<=0||!isfinite(start)||!isfinite(end))return TINYELLIPTIC_INVALID_ARGUMENT;
     if(fabs(start)>1e6||fabs(end)>1e6)return TINYELLIPTIC_RANGE;
-    if(a==b){result=a*(end-start);if(!isfinite(result))return TINYELLIPTIC_ARITHMETIC_ERROR;*length=result;return TINYELLIPTIC_OK;}
+    if(a==b){result=a*(end-start);if(!isfinite(result))return TINYELLIPTIC_ARITHMETIC_ERROR;
+    *length=result;return TINYELLIPTIC_OK;}
     if(a>=b){major=a;ratio=b/a;offset=TE_HALF_PI;}else{major=b;ratio=a/b;offset=0;}
     m=1-ratio*ratio;n0=floor((start+offset+TE_HALF_PI)/TE_PI);n1=floor((end+offset+TE_HALF_PI)/TE_PI);
     r0=(start+offset)-n0*TE_PI;r1=(end+offset)-n1*TE_PI;
     if(principal(r0,m,1,&e0)!=TINYELLIPTIC_OK||principal(r1,m,1,&e1)!=TINYELLIPTIC_OK||principal(TE_HALF_PI,m,1,&complete)!=TINYELLIPTIC_OK)return TINYELLIPTIC_NO_CONVERGENCE;
     result=major*(2*(n1-n0)*complete+e1-e0);
-    if(!isfinite(result))return TINYELLIPTIC_ARITHMETIC_ERROR;*length=result;return TINYELLIPTIC_OK;
+    if(!isfinite(result))return TINYELLIPTIC_ARITHMETIC_ERROR;
+    *length=result;return TINYELLIPTIC_OK;
 }

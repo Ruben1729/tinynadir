@@ -60,12 +60,14 @@ tinyobservations_status tinyobservations_relative(const tinyobservations_state *
 {
     tinyobservations_state r;unsigned i;if(!out||!valid_state(s)||!valid_state(observer))return TINYOBSERVATIONS_INVALID;
     for(i=0;i<3;++i){r.position_m[i]=s->position_m[i]-observer->position_m[i];r.velocity_m_s[i]=s->velocity_m_s[i]-observer->velocity_m_s[i];}
-    if(!valid_state(&r))return TINYOBSERVATIONS_INVALID;*out=r;return TINYOBSERVATIONS_OK;
+    if(!valid_state(&r))return TINYOBSERVATIONS_INVALID;
+    *out=r;return TINYOBSERVATIONS_OK;
 }
 tinyobservations_status tinyobservations_ecliptic(const tinyobservations_state *s,double eps,tinyobservations_state *out)
 {
     tinyobservations_state r;double c,d;if(!out||!valid_state(s)||!isfinite(eps))return TINYOBSERVATIONS_INVALID;c=cos(eps);d=sin(eps);
     r.position_m[0]=s->position_m[0];r.position_m[1]=c*s->position_m[1]+d*s->position_m[2];r.position_m[2]=-d*s->position_m[1]+c*s->position_m[2];
     r.velocity_m_s[0]=s->velocity_m_s[0];r.velocity_m_s[1]=c*s->velocity_m_s[1]+d*s->velocity_m_s[2];r.velocity_m_s[2]=-d*s->velocity_m_s[1]+c*s->velocity_m_s[2];
-    if(!valid_state(&r))return TINYOBSERVATIONS_INVALID;*out=r;return TINYOBSERVATIONS_OK;
+    if(!valid_state(&r))return TINYOBSERVATIONS_INVALID;
+    *out=r;return TINYOBSERVATIONS_OK;
 }

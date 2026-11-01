@@ -9,7 +9,7 @@ static void normalize(double in0,double in1,double out[2]) {
 static tinyframes_status valid(const tinyframes_epoch *in,tinyframes_frame from,tinyframes_frame to,tinyframes_model model,tinyframes_epoch *e) {
     double t,u,d;int i;
     if(!in)return TINYFRAMES_INVALID;
-    if(from<TINYFRAMES_GCRF||from>TINYFRAMES_PEF1982||to<TINYFRAMES_GCRF||to>TINYFRAMES_PEF1982||(model!=TINYFRAMES_IAU2006A&&model!=TINYFRAMES_IAU2000B))return TINYFRAMES_RANGE;
+    if((unsigned)from>(unsigned)TINYFRAMES_PEF1982||(unsigned)to>(unsigned)TINYFRAMES_PEF1982||(model!=TINYFRAMES_IAU2006A&&model!=TINYFRAMES_IAU2000B))return TINYFRAMES_RANGE;
     for(i=0;i<2;i++)if(!isfinite(in->tt[i])||!isfinite(in->ut1[i]))return TINYFRAMES_INVALID;
     if(!isfinite(in->xp_rad)||!isfinite(in->yp_rad)||!isfinite(in->dx_rad)||!isfinite(in->dy_rad)||!isfinite(in->lod_s))return TINYFRAMES_INVALID;
     if(fabs(in->tt[0])>1e8||fabs(in->tt[1])>1e8||fabs(in->ut1[0])>1e8||fabs(in->ut1[1])>1e8)return TINYFRAMES_RANGE;

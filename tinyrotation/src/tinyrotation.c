@@ -33,7 +33,8 @@ tinyrotation_status tinyrotation_inverse(const double q[4],double out[4]){
     double r[4];tinyrotation_status status;
     if(!out)return TINYROTATION_INVALID_ARGUMENT;
     status=tinyrotation_normalize(q,r);if(status!=TINYROTATION_OK)return status;
-    for(size_t i=1;i<4;++i)r[i]=-r[i];memcpy(out,r,sizeof r);return TINYROTATION_OK;
+    for(size_t i=1;i<4;++i)r[i]=-r[i];
+    memcpy(out,r,sizeof r);return TINYROTATION_OK;
 }
 tinyrotation_status tinyrotation_to_dcm(const double q[4],double dcm[9]){
     double a[4],r[9],w,x,y,z;tinyrotation_status status;
@@ -99,7 +100,8 @@ tinyrotation_status tinyrotation_to_rotvec(const double q[4],double vector[3]){
     double axis[3],angle;tinyrotation_status status;
     if(!vector)return TINYROTATION_INVALID_ARGUMENT;
     status=tinyrotation_to_axis_angle(q,axis,&angle);if(status!=TINYROTATION_OK)return status;
-    for(size_t i=0;i<3;++i)axis[i]*=angle;memcpy(vector,axis,sizeof axis);return TINYROTATION_OK;
+    for(size_t i=0;i<3;++i)axis[i]*=angle;
+    memcpy(vector,axis,sizeof axis);return TINYROTATION_OK;
 }
 tinyrotation_status tinyrotation_from_euler_zyx(double yaw,double pitch,double roll,double q[4]){
     double cy,sy,cp,sp,cr,sr,r[4];
@@ -127,5 +129,6 @@ tinyrotation_status tinyrotation_slerp(const double from[4],const double to[4],d
     dot=fmin(dot,1);
     if(dot>1-1e-12){s0=1-fraction;s1=fraction;}
     else{theta=acos(dot);s0=sin((1-fraction)*theta)/sin(theta);s1=sin(fraction*theta)/sin(theta);}
-    for(size_t i=0;i<4;++i)r[i]=s0*a[i]+s1*b[i];return tinyrotation_normalize(r,out);
+    for(size_t i=0;i<4;++i)r[i]=s0*a[i]+s1*b[i];
+    return tinyrotation_normalize(r,out);
 }
