@@ -1,0 +1,6 @@
+tinyframes contains a private namespaced subset of ERFA (NumFOCUS Foundation),
+https://github.com/liberfa/erfa commit 1a8044cde5b7763295d472a6443387239127c6c8.
+ERFA is derived with permission from IAU SOFA. The original BSD-style license
+is retained in ERFA-LICENSE.txt and in each adapted source file.
+TinyNadir changes: prefixes for symbols only; public wrapper is separate.
+No claim is made that this is an unmodified ERFA/SOFA distribution.
