@@ -35,7 +35,7 @@ endif()
 # Modules are registered here after their independent comparison and offline
 # regression tests pass. Additional modules are never mandatory dependencies
 # of tinysgp4.
-set(TINYNADIR_AVAILABLE_MODULES tinysgp4 tinylinalg tinystumpff tinyanomaly tinytime tinyrotation tinytriad tinydavenport tinyquest tinyigrf)
+set(TINYNADIR_AVAILABLE_MODULES tinysgp4 tinylinalg tinystumpff tinyanomaly tinytime tinyrotation tinytriad tinydavenport tinyquest tinyigrf tinyeop)
 foreach(_module IN LISTS TINYNADIR_AVAILABLE_MODULES)
     if(_module STREQUAL "tinysgp4")
         continue()
