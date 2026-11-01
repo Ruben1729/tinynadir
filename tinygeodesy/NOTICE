@@ -1,0 +1,7 @@
+tinygeodesy is an independent implementation of ellipsoidal coordinate equations.
+Reference outputs use pymap3d 3.2.0 (BSD licensed) for forward ECEF and local bases,
+and mpmath 1.4.1 (BSD licensed) for an independent 90-digit inverse normal root.
+Raw pymap3d inverse comparisons, reference outputs, and generators stay ignored in
+.validation/tinygeodesy/. No external runtime is linked or fetched by tests.
+https://github.com/geospace-code/pymap3d
+https://github.com/mpmath/mpmath
