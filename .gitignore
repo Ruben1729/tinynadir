@@ -1,4 +1,5 @@
 build/
+.validation/
 cmake-build*/
 CMakeUserPresets.json
 __pycache__/
