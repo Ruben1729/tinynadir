@@ -1,0 +1,4 @@
+tinybdot is independently written from the mathematical model documented
+in README.md. No third-party source is embedded in its implementation.
+Independent numerical reference outputs, versions, and limitations are
+documented in README.md and retained as static regression fixtures.
