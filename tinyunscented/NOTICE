@@ -1,0 +1,5 @@
+tinyunscented independently implements scaled unscented-transform equations.
+Frozen points, weights, and nonlinear moments were captured from FilterPy 2.0.0
+(MIT license), MerweScaledSigmaPoints and unscented_transform. No FilterPy source
+is included or translated. Raw outputs/generator stay ignored in .validation/tinyunscented/.
+https://github.com/rlabbe/filterpy
