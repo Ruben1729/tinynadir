@@ -1,0 +1,7 @@
+tinyelements is independently implemented from published conic geometry.
+Vallado's Python coe2rv, rv2coe, rv2rsw, rv2ntw, and rv2pqw at commit
+49df0479c950917c0a2c5ac31f2db6477bba57f6 were executed only as comparison oracles.
+No AGPL source was translated or included. Raw oracle output and its generator
+remain ignored in .validation/tinyelements/. Numerical expected outputs are
+frozen in tests/data/reference.h; no upstream runtime dependency is required.
+Source: https://github.com/CelesTrak/fundamentals-of-astrodynamics/tree/49df0479c950917c0a2c5ac31f2db6477bba57f6
