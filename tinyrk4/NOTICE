@@ -1,0 +1,3 @@
+tinyrk4 is an independently written MIT implementation from published mathematics.
+No reference library source is linked into the runtime.
+Frozen independent SciPy DOP853 integration results compare exponential decay, harmonic motion, and nonlinear Lorenz dynamics over small positive and negative intervals. Per-case tolerances include the expected RK4 local truncation error, rather than claiming equality with a high-order solver. Raw source/version records are in the reference JSON; checked-in fixtures and tests print the sampled maximum scaled error. Reference: https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.solve_ivp.html .
