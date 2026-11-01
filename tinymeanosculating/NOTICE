@@ -1,0 +1,5 @@
+Independent MIT implementation. No external propagation or averaging implementation source is incorporated.
+
+The specific centered-one-osculating-orbit time-average filter is fully defined in README.md. It is not a port of the Brouwer–Lyddane, DSST or SGP4 mean-element transformations.
+
+Independent numeric fixtures use SciPy 1.18.1 solve_ivp(method="DOP853") for central-plus-J2 dynamics and NumPy 2.5.4 vector-based element conversions. These reference libraries are used only in ignored generation material, not included or required at runtime or in offline C tests.
