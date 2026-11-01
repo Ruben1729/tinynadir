@@ -1,0 +1,20 @@
+tinydtm incorporates a C99 adaptation of the scalar DTM2000 implementation
+and its coefficient resource from Orekit, Apache License 2.0 (see LICENSE).
+Source: https://github.com/CS-SI/Orekit
+Revision: 734c814858c114824f50292e838be057c614906f
+Paths: src/main/java/org/orekit/models/earth/atmosphere/DTM2000.java
+       src/main/resources/assets/org/orekit/dtm_2000.txt
+
+Changes: translated scalar computation to C99; coefficients compiled as immutable
+arrays; Java per-evaluation allocations replaced by caller-owned reusable scratch;
+explicit SI input/output and profile validity checks; no automatic data loading.
+The adapted C source retains its original CS GROUP copyright/license header.
+
+Relevant original Orekit attribution:
+OREKIT
+Copyright 2002-2026 CS GROUP
+This product includes software developed by CS GROUP
+(https://www.cs-soprasteria.com/en/).
+This product includes software translated from original work developed by
+R. Biancale, S. Bruinsma (CNES).
+Original Java translation: Fabien Maussion.
