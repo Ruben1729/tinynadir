@@ -1,0 +1,3 @@
+tinyrotation is independently written from standard Hamilton quaternion and
+orthogonal rotation identities. No SciPy, AHRS, or Vallado source is included.
+Frozen test results were obtained using SciPy 1.18.1 Rotation and Slerp.
