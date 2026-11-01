@@ -1,0 +1,3 @@
+tinyspaceweather is an independently written MIT implementation from published mathematics.
+No reference library source is linked into the runtime.
+64 independent NumPy interpolation cases and109 Kp/Ap conversions from standard tabulated nodes are frozen, scaled tolerance3e-14. Includes endpoints, out-of-range/NaN rejection and failure atomicity. Table source: https://kp.gfz.de/en/data ; oracle https://numpy.org/doc/stable/reference/generated/numpy.interp.html .
