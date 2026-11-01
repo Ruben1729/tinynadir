@@ -1,0 +1,5 @@
+tinykepler is independently implemented from universal-variable two-body equations.
+No AGPL source was translated or included. Frozen expected states were generated
+with SciPy 1.18.1 DOP853 numerical integration (BSD licensed), using no tinykepler
+outputs to generate reference states. The raw oracle output and generator are in
+ignored .validation/tinykepler/. Reference: https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.solve_ivp.html
