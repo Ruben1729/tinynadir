@@ -1,0 +1,3 @@
+tinyomm is an independently written MIT implementation from published mathematics.
+No reference library source is linked into the runtime.
+Independent python-sgp4 OMM initialization/propagation cases are frozen for numeric and9digit ids, multiple orbit regimes, epoch fractions, KVN unit tags and signed time offsets. SGP4 numerical limits1mm/1e-5m/s. Parser tests reject missing/duplicate/incompatible fields and verify explicit defaults and atomicity. Metadata ids do not affect dynamics; reference uses satnum0 for ids its internal Alpha-5 encoding cannot represent. References: https://celestrak.org/NORAD/documentation/gp-data-formats.php and https://github.com/brandon-rhodes/python-sgp4 .
