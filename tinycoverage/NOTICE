@@ -1,0 +1,7 @@
+tinycoverage is independently written C99 code (MIT; see LICENSE).
+Reference concepts: spherical navigation/visibility geometry, local ENU
+coordinates, two-body repeating nodal periods, sampled sign-change event
+searches, and bisection. No Vallado AGPL source was translated.
+Independent numerical references used only during validation: GeographicLib2.1,
+pymap3d3.2.0, SciPy1.18.1. Only frozen numerical results are retained in tests;
+reference packages/source/raw output remain in ignored .validation/tinycoverage.
