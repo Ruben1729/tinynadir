@@ -1,0 +1,6 @@
+tinyquest is independently written from the published QUEST/Wahba mathematics:
+the characteristic quartic's maximum root is solved by bounded Newton steps,
+and the attitude is recovered using full adjugate columns.
+It does not call the Davenport eigensolver or include source from AHRS,
+SciPy, NumPy, or Vallado. Frozen numerical comparisons use independent
+SciPy 1.18.1 Kabsch/SVD align_vectors results.
