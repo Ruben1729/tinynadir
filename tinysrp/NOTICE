@@ -1,0 +1,3 @@
+tinysrp is an independently written MIT implementation from published mathematics.
+No reference library source is linked into the runtime.
+100 independent NumPy vector force cases freeze expected outputs across geometry, illumination and area/mass. Componentwise relative tolerance 5e-15, plus exact direction/umbra cases. Existing equivalent model description: https://help.agi.com/stkEngineOnUNIX/Content/hpop/hpop.htm ; numerical oracle https://numpy.org/doc/stable/reference/generated/numpy.linalg.norm.html .
