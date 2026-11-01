@@ -213,6 +213,22 @@ Heap use is zero in the library code. Working storage is caller-owned state/work
 
 Workspace figures are not total RAM budgets. Shared/transitive calls and libm add stack; ABI and optimization change size. Degree truncation in the current IGRF profile reduces work but keeps its compiled coefficient table. Full frame/ephemeris/atmosphere models can consume much more flash than the smallest controllers. Measure the actual linked selection, peak stack, and execution time on the target.
 
+A separate compile/archive check built all 68 modules for a **32-bit Cortex-M7**, using Arm GCC 16.2, Thumb-2, FPv5-D16 hardware double precision, `-Os`, strict C99 and genuine Newlib 4.5.0.20241231 headers. Every archive had zero `.data` and `.bss`, no writable global symbols, and no direct allocator imports. Representative **unlinked code + read-only section sums**, excluding dependencies, are:
+
+| Module | Bytes |
+| --- | ---: |
+| `tinybdot` | 600 |
+| `tinypd` | 376 |
+| `tinyquest` | 1,492 |
+| `tinymekf` | 2,302 |
+| `tinyigrf` | 5,200 |
+| `tinydtm` | 12,260 |
+| `tinymsis` | 41,728 |
+| `tinysun` | 48,580 |
+| `tinyframes` | 124,608 |
+
+The sum across every archive was 342,160 bytes before linking. This is a compile/storage measurement, not a complete firmware size or hardware execution test: it excludes libm/libc/libgcc, startup, application code, caller storage and stack, and does not apply linker garbage collection. Select modules and measure the final image rather than reserving space for the whole collection.
+
 The [SGP4 fixed-point investigation](tinysgp4/README.md#fixed-point-investigation) records why the evaluated 64-bit Q19.44 backend was dropped: coefficient loss and error growth made it unsuitable. That result concerns the tested design; the maintained implementation uses binary64 rather than fixed point or a float backend.
 
 ## Validation and provenance
