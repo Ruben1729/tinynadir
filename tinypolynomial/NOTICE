@@ -1,0 +1,3 @@
+tinypolynomial is an independently written MIT implementation from published mathematics.
+No reference library source is linked into the runtime.
+96 seeded, separated real/conjugate-root polynomial cases of degree1–8 and multiple coefficient/root scales compare with independently computed NumPy companion-matrix roots. Root sets are matched without relying on conjugate order; scaled forward tolerance2e-8 in these conditioned cases. Zero roots, invalid coefficients/degrees and output atomicity are tested. Reference: https://numpy.org/doc/stable/reference/generated/numpy.roots.html .
