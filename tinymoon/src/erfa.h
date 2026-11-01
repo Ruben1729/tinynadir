@@ -1,0 +1,589 @@
+#ifndef ERFAHDEF
+#define ERFAHDEF
+
+/*
+**  - - - - - - -
+**   e r f a . h
+**  - - - - - - -
+**
+**  Prototype function declarations for ERFA library.
+**
+**  Copyright (C) 2013-2023, NumFOCUS Foundation.
+**  Derived, with permission, from the SOFA library.  See notes at end of file.
+*/
+
+#include "math.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/* Star-independent astrometry parameters */
+typedef struct {
+   double pmt;        /* PM time interval (SSB, Julian years) */
+   double eb[3];      /* SSB to observer (vector, au) */
+   double eh[3];      /* Sun to observer (unit vector) */
+   double em;         /* distance from Sun to observer (au) */
+   double v[3];       /* barycentric observer velocity (vector, c) */
+   double bm1;        /* sqrt(1-|v|^2): reciprocal of Lorenz factor */
+   double bpn[3][3];  /* bias-precession-nutation matrix */
+   double along;      /* longitude + s' + dERA(DUT) (radians) */
+   double phi;        /* geodetic latitude (radians) */
+   double xpl;        /* polar motion xp wrt local meridian (radians) */
+   double ypl;        /* polar motion yp wrt local meridian (radians) */
+   double sphi;       /* sine of geodetic latitude */
+   double cphi;       /* cosine of geodetic latitude */
+   double diurab;     /* magnitude of diurnal aberration vector */
+   double eral;       /* "local" Earth rotation angle (radians) */
+   double refa;       /* refraction constant A (radians) */
+   double refb;       /* refraction constant B (radians) */
+} tinymoon_erfa_ASTROM;
+/* (Vectors eb, eh, em and v are all with respect to BCRS axes.) */
+
+/* Body parameters for light deflection */
+typedef struct {
+   double bm;         /* mass of the body (solar masses) */
+   double dl;         /* deflection limiter (radians^2/2) */
+   double pv[2][3];   /* barycentric PV of the body (au, au/day) */
+} tinymoon_erfa_LDBODY;
+
+/* Astronomy/Calendars */
+int tinymoon_erfa_Cal2jd(int iy, int im, int id, double *djm0, double *djm);
+double tinymoon_erfa_Epb(double dj1, double dj2);
+void tinymoon_erfa_Epb2jd(double epb, double *djm0, double *djm);
+double tinymoon_erfa_Epj(double dj1, double dj2);
+void tinymoon_erfa_Epj2jd(double epj, double *djm0, double *djm);
+int tinymoon_erfa_Jd2cal(double dj1, double dj2,
+                     int *iy, int *im, int *id, double *fd);
+int tinymoon_erfa_Jdcalf(int ndp, double dj1, double dj2, int iymdf[4]);
+
+/* Astronomy/Astrometry */
+void tinymoon_erfa_Ab(double pnat[3], double v[3], double s, double bm1,
+           double ppr[3]);
+void tinymoon_erfa_Apcg(double date1, double date2,
+             double ebpv[2][3], double ehp[3],
+             tinymoon_erfa_ASTROM *astrom);
+void tinymoon_erfa_Apcg13(double date1, double date2, tinymoon_erfa_ASTROM *astrom);
+void tinymoon_erfa_Apci(double date1, double date2,
+             double ebpv[2][3], double ehp[3],
+             double x, double y, double s,
+             tinymoon_erfa_ASTROM *astrom);
+void tinymoon_erfa_Apci13(double date1, double date2,
+               tinymoon_erfa_ASTROM *astrom, double *eo);
+void tinymoon_erfa_Apco(double date1, double date2,
+             double ebpv[2][3], double ehp[3],
+             double x, double y, double s, double theta,
+             double elong, double phi, double hm,
+             double xp, double yp, double sp,
+             double refa, double refb,
+             tinymoon_erfa_ASTROM *astrom);
+int tinymoon_erfa_Apco13(double utc1, double utc2, double dut1,
+              double elong, double phi, double hm, double xp, double yp,
+              double phpa, double tc, double rh, double wl,
+              tinymoon_erfa_ASTROM *astrom, double *eo);
+void tinymoon_erfa_Apcs(double date1, double date2, double pv[2][3],
+             double ebpv[2][3], double ehp[3],
+             tinymoon_erfa_ASTROM *astrom);
+void tinymoon_erfa_Apcs13(double date1, double date2, double pv[2][3],
+               tinymoon_erfa_ASTROM *astrom);
+void tinymoon_erfa_Aper(double theta, tinymoon_erfa_ASTROM *astrom);
+void tinymoon_erfa_Aper13(double ut11, double ut12, tinymoon_erfa_ASTROM *astrom);
+void tinymoon_erfa_Apio(double sp, double theta,
+             double elong, double phi, double hm, double xp, double yp,
+             double refa, double refb,
+             tinymoon_erfa_ASTROM *astrom);
+int tinymoon_erfa_Apio13(double utc1, double utc2, double dut1,
+              double elong, double phi, double hm, double xp, double yp,
+              double phpa, double tc, double rh, double wl,
+              tinymoon_erfa_ASTROM *astrom);
+void tinymoon_erfa_Atcc13(double rc, double dc,
+               double pr, double pd, double px, double rv,
+               double date1, double date2,
+               double *ra, double *da);
+void tinymoon_erfa_Atccq(double rc, double dc,
+              double pr, double pd, double px, double rv,
+              tinymoon_erfa_ASTROM *astrom, double *ra, double *da);
+void tinymoon_erfa_Atci13(double rc, double dc,
+               double pr, double pd, double px, double rv,
+               double date1, double date2,
+               double *ri, double *di, double *eo);
+void tinymoon_erfa_Atciq(double rc, double dc, double pr, double pd,
+              double px, double rv, tinymoon_erfa_ASTROM *astrom,
+              double *ri, double *di);
+void tinymoon_erfa_Atciqn(double rc, double dc, double pr, double pd,
+               double px, double rv, tinymoon_erfa_ASTROM *astrom,
+               int n, tinymoon_erfa_LDBODY b[], double *ri, double *di);
+void tinymoon_erfa_Atciqz(double rc, double dc, tinymoon_erfa_ASTROM *astrom,
+               double *ri, double *di);
+int tinymoon_erfa_Atco13(double rc, double dc,
+              double pr, double pd, double px, double rv,
+              double utc1, double utc2, double dut1,
+              double elong, double phi, double hm, double xp, double yp,
+              double phpa, double tc, double rh, double wl,
+              double *aob, double *zob, double *hob,
+              double *dob, double *rob, double *eo);
+void tinymoon_erfa_Atic13(double ri, double di,
+               double date1, double date2,
+               double *rc, double *dc, double *eo);
+void tinymoon_erfa_Aticq(double ri, double di, tinymoon_erfa_ASTROM *astrom,
+              double *rc, double *dc);
+void tinymoon_erfa_Aticqn(double ri, double di, tinymoon_erfa_ASTROM *astrom,
+               int n, tinymoon_erfa_LDBODY b[], double *rc, double *dc);
+int tinymoon_erfa_Atio13(double ri, double di,
+              double utc1, double utc2, double dut1,
+              double elong, double phi, double hm, double xp, double yp,
+              double phpa, double tc, double rh, double wl,
+              double *aob, double *zob, double *hob,
+              double *dob, double *rob);
+void tinymoon_erfa_Atioq(double ri, double di, tinymoon_erfa_ASTROM *astrom,
+              double *aob, double *zob,
+              double *hob, double *dob, double *rob);
+int tinymoon_erfa_Atoc13(const char *type, double ob1, double ob2,
+              double utc1, double utc2, double dut1,
+              double elong, double phi, double hm, double xp, double yp,
+              double phpa, double tc, double rh, double wl,
+              double *rc, double *dc);
+int tinymoon_erfa_Atoi13(const char *type, double ob1, double ob2,
+              double utc1, double utc2, double dut1,
+              double elong, double phi, double hm, double xp, double yp,
+              double phpa, double tc, double rh, double wl,
+              double *ri, double *di);
+void tinymoon_erfa_Atoiq(const char *type,
+              double ob1, double ob2, tinymoon_erfa_ASTROM *astrom,
+              double *ri, double *di);
+void tinymoon_erfa_Ld(double bm, double p[3], double q[3], double e[3],
+           double em, double dlim, double p1[3]);
+void tinymoon_erfa_Ldn(int n, tinymoon_erfa_LDBODY b[], double ob[3], double sc[3],
+            double sn[3]);
+void tinymoon_erfa_Ldsun(double p[3], double e[3], double em, double p1[3]);
+void tinymoon_erfa_Pmpx(double rc, double dc, double pr, double pd,
+             double px, double rv, double pmt, double pob[3],
+             double pco[3]);
+int tinymoon_erfa_Pmsafe(double ra1, double dec1, double pmr1, double pmd1,
+              double px1, double rv1,
+              double ep1a, double ep1b, double ep2a, double ep2b,
+              double *ra2, double *dec2, double *pmr2, double *pmd2,
+              double *px2, double *rv2);
+void tinymoon_erfa_Pvtob(double elong, double phi, double height, double xp,
+              double yp, double sp, double theta, double pv[2][3]);
+void tinymoon_erfa_Refco(double phpa, double tc, double rh, double wl,
+              double *refa, double *refb);
+
+/* Astronomy/Ephemerides */
+int tinymoon_erfa_Epv00(double date1, double date2,
+             double pvh[2][3], double pvb[2][3]);
+void tinymoon_erfa_Moon98(double date1, double date2, double pv[2][3]);
+int tinymoon_erfa_Plan94(double date1, double date2, int np, double pv[2][3]);
+
+/* Astronomy/FundamentalArgs */
+double tinymoon_erfa_Fad03(double t);
+double tinymoon_erfa_Fae03(double t);
+double tinymoon_erfa_Faf03(double t);
+double tinymoon_erfa_Faju03(double t);
+double tinymoon_erfa_Fal03(double t);
+double tinymoon_erfa_Falp03(double t);
+double tinymoon_erfa_Fama03(double t);
+double tinymoon_erfa_Fame03(double t);
+double tinymoon_erfa_Fane03(double t);
+double tinymoon_erfa_Faom03(double t);
+double tinymoon_erfa_Fapa03(double t);
+double tinymoon_erfa_Fasa03(double t);
+double tinymoon_erfa_Faur03(double t);
+double tinymoon_erfa_Fave03(double t);
+
+/* Astronomy/PrecNutPolar */
+void tinymoon_erfa_Bi00(double *dpsibi, double *depsbi, double *dra);
+void tinymoon_erfa_Bp00(double date1, double date2,
+             double rb[3][3], double rp[3][3], double rbp[3][3]);
+void tinymoon_erfa_Bp06(double date1, double date2,
+             double rb[3][3], double rp[3][3], double rbp[3][3]);
+void tinymoon_erfa_Bpn2xy(double rbpn[3][3], double *x, double *y);
+void tinymoon_erfa_C2i00a(double date1, double date2, double rc2i[3][3]);
+void tinymoon_erfa_C2i00b(double date1, double date2, double rc2i[3][3]);
+void tinymoon_erfa_C2i06a(double date1, double date2, double rc2i[3][3]);
+void tinymoon_erfa_C2ibpn(double date1, double date2, double rbpn[3][3],
+               double rc2i[3][3]);
+void tinymoon_erfa_C2ixy(double date1, double date2, double x, double y,
+              double rc2i[3][3]);
+void tinymoon_erfa_C2ixys(double x, double y, double s, double rc2i[3][3]);
+void tinymoon_erfa_C2t00a(double tta, double ttb, double uta, double utb,
+               double xp, double yp, double rc2t[3][3]);
+void tinymoon_erfa_C2t00b(double tta, double ttb, double uta, double utb,
+               double xp, double yp, double rc2t[3][3]);
+void tinymoon_erfa_C2t06a(double tta, double ttb, double uta, double utb,
+               double xp, double yp, double rc2t[3][3]);
+void tinymoon_erfa_C2tcio(double rc2i[3][3], double era, double rpom[3][3],
+               double rc2t[3][3]);
+void tinymoon_erfa_C2teqx(double rbpn[3][3], double gst, double rpom[3][3],
+               double rc2t[3][3]);
+void tinymoon_erfa_C2tpe(double tta, double ttb, double uta, double utb,
+              double dpsi, double deps, double xp, double yp,
+              double rc2t[3][3]);
+void tinymoon_erfa_C2txy(double tta, double ttb, double uta, double utb,
+              double x, double y, double xp, double yp,
+              double rc2t[3][3]);
+double tinymoon_erfa_Eo06a(double date1, double date2);
+double tinymoon_erfa_Eors(double rnpb[3][3], double s);
+void tinymoon_erfa_Fw2m(double gamb, double phib, double psi, double eps,
+             double r[3][3]);
+void tinymoon_erfa_Fw2xy(double gamb, double phib, double psi, double eps,
+              double *x, double *y);
+void tinymoon_erfa_Ltp(double epj, double rp[3][3]);
+void tinymoon_erfa_Ltpb(double epj, double rpb[3][3]);
+void tinymoon_erfa_Ltpecl(double epj, double vec[3]);
+void tinymoon_erfa_Ltpequ(double epj, double veq[3]);
+void tinymoon_erfa_Num00a(double date1, double date2, double rmatn[3][3]);
+void tinymoon_erfa_Num00b(double date1, double date2, double rmatn[3][3]);
+void tinymoon_erfa_Num06a(double date1, double date2, double rmatn[3][3]);
+void tinymoon_erfa_Numat(double epsa, double dpsi, double deps, double rmatn[3][3]);
+void tinymoon_erfa_Nut00a(double date1, double date2, double *dpsi, double *deps);
+void tinymoon_erfa_Nut00b(double date1, double date2, double *dpsi, double *deps);
+void tinymoon_erfa_Nut06a(double date1, double date2, double *dpsi, double *deps);
+void tinymoon_erfa_Nut80(double date1, double date2, double *dpsi, double *deps);
+void tinymoon_erfa_Nutm80(double date1, double date2, double rmatn[3][3]);
+double tinymoon_erfa_Obl06(double date1, double date2);
+double tinymoon_erfa_Obl80(double date1, double date2);
+void tinymoon_erfa_P06e(double date1, double date2,
+             double *eps0, double *psia, double *oma, double *bpa,
+             double *bqa, double *pia, double *bpia,
+             double *epsa, double *chia, double *za, double *zetaa,
+             double *thetaa, double *pa,
+             double *gam, double *phi, double *psi);
+void tinymoon_erfa_Pb06(double date1, double date2,
+             double *bzeta, double *bz, double *btheta);
+void tinymoon_erfa_Pfw06(double date1, double date2,
+              double *gamb, double *phib, double *psib, double *epsa);
+void tinymoon_erfa_Pmat00(double date1, double date2, double rbp[3][3]);
+void tinymoon_erfa_Pmat06(double date1, double date2, double rbp[3][3]);
+void tinymoon_erfa_Pmat76(double date1, double date2, double rmatp[3][3]);
+void tinymoon_erfa_Pn00(double date1, double date2, double dpsi, double deps,
+             double *epsa,
+             double rb[3][3], double rp[3][3], double rbp[3][3],
+             double rn[3][3], double rbpn[3][3]);
+void tinymoon_erfa_Pn00a(double date1, double date2,
+              double *dpsi, double *deps, double *epsa,
+              double rb[3][3], double rp[3][3], double rbp[3][3],
+              double rn[3][3], double rbpn[3][3]);
+void tinymoon_erfa_Pn00b(double date1, double date2,
+              double *dpsi, double *deps, double *epsa,
+              double rb[3][3], double rp[3][3], double rbp[3][3],
+              double rn[3][3], double rbpn[3][3]);
+void tinymoon_erfa_Pn06(double date1, double date2, double dpsi, double deps,
+             double *epsa,
+             double rb[3][3], double rp[3][3], double rbp[3][3],
+             double rn[3][3], double rbpn[3][3]);
+void tinymoon_erfa_Pn06a(double date1, double date2,
+              double *dpsi, double *deps, double *epsa,
+              double rb[3][3], double rp[3][3], double rbp[3][3],
+              double rn[3][3], double rbpn[3][3]);
+void tinymoon_erfa_Pnm00a(double date1, double date2, double rbpn[3][3]);
+void tinymoon_erfa_Pnm00b(double date1, double date2, double rbpn[3][3]);
+void tinymoon_erfa_Pnm06a(double date1, double date2, double rnpb[3][3]);
+void tinymoon_erfa_Pnm80(double date1, double date2, double rmatpn[3][3]);
+void tinymoon_erfa_Pom00(double xp, double yp, double sp, double rpom[3][3]);
+void tinymoon_erfa_Pr00(double date1, double date2,
+             double *dpsipr, double *depspr);
+void tinymoon_erfa_Prec76(double date01, double date02,
+               double date11, double date12,
+               double *zeta, double *z, double *theta);
+double tinymoon_erfa_S00(double date1, double date2, double x, double y);
+double tinymoon_erfa_S00a(double date1, double date2);
+double tinymoon_erfa_S00b(double date1, double date2);
+double tinymoon_erfa_S06(double date1, double date2, double x, double y);
+double tinymoon_erfa_S06a(double date1, double date2);
+double tinymoon_erfa_Sp00(double date1, double date2);
+void tinymoon_erfa_Xy06(double date1, double date2, double *x, double *y);
+void tinymoon_erfa_Xys00a(double date1, double date2,
+               double *x, double *y, double *s);
+void tinymoon_erfa_Xys00b(double date1, double date2,
+               double *x, double *y, double *s);
+void tinymoon_erfa_Xys06a(double date1, double date2,
+               double *x, double *y, double *s);
+
+/* Astronomy/RotationAndTime */
+double tinymoon_erfa_Ee00(double date1, double date2, double epsa, double dpsi);
+double tinymoon_erfa_Ee00a(double date1, double date2);
+double tinymoon_erfa_Ee00b(double date1, double date2);
+double tinymoon_erfa_Ee06a(double date1, double date2);
+double tinymoon_erfa_Eect00(double date1, double date2);
+double tinymoon_erfa_Eqeq94(double date1, double date2);
+double tinymoon_erfa_Era00(double dj1, double dj2);
+double tinymoon_erfa_Gmst00(double uta, double utb, double tta, double ttb);
+double tinymoon_erfa_Gmst06(double uta, double utb, double tta, double ttb);
+double tinymoon_erfa_Gmst82(double dj1, double dj2);
+double tinymoon_erfa_Gst00a(double uta, double utb, double tta, double ttb);
+double tinymoon_erfa_Gst00b(double uta, double utb);
+double tinymoon_erfa_Gst06(double uta, double utb, double tta, double ttb,
+                double rnpb[3][3]);
+double tinymoon_erfa_Gst06a(double uta, double utb, double tta, double ttb);
+double tinymoon_erfa_Gst94(double uta, double utb);
+
+/* Astronomy/SpaceMotion */
+int tinymoon_erfa_Pvstar(double pv[2][3], double *ra, double *dec,
+              double *pmr, double *pmd, double *px, double *rv);
+int tinymoon_erfa_Starpv(double ra, double dec,
+              double pmr, double pmd, double px, double rv,
+              double pv[2][3]);
+
+/* Astronomy/StarCatalogs */
+void tinymoon_erfa_Fk425(double r1950, double d1950,
+              double dr1950, double dd1950,
+              double p1950, double v1950,
+              double *r2000, double *d2000,
+              double *dr2000, double *dd2000,
+              double *p2000, double *v2000);
+void tinymoon_erfa_Fk45z(double r1950, double d1950, double bepoch,
+              double *r2000, double *d2000);
+void tinymoon_erfa_Fk524(double r2000, double d2000,
+              double dr2000, double dd2000,
+              double p2000, double v2000,
+              double *r1950, double *d1950,
+              double *dr1950, double *dd1950,
+              double *p1950, double *v1950);
+void tinymoon_erfa_Fk52h(double r5, double d5,
+              double dr5, double dd5, double px5, double rv5,
+              double *rh, double *dh,
+              double *drh, double *ddh, double *pxh, double *rvh);
+void tinymoon_erfa_Fk54z(double r2000, double d2000, double bepoch,
+              double *r1950, double *d1950,
+              double *dr1950, double *dd1950);
+void tinymoon_erfa_Fk5hip(double r5h[3][3], double s5h[3]);
+void tinymoon_erfa_Fk5hz(double r5, double d5, double date1, double date2,
+              double *rh, double *dh);
+void tinymoon_erfa_H2fk5(double rh, double dh,
+              double drh, double ddh, double pxh, double rvh,
+              double *r5, double *d5,
+              double *dr5, double *dd5, double *px5, double *rv5);
+void tinymoon_erfa_Hfk5z(double rh, double dh, double date1, double date2,
+              double *r5, double *d5, double *dr5, double *dd5);
+int tinymoon_erfa_Starpm(double ra1, double dec1,
+              double pmr1, double pmd1, double px1, double rv1,
+              double ep1a, double ep1b, double ep2a, double ep2b,
+              double *ra2, double *dec2,
+              double *pmr2, double *pmd2, double *px2, double *rv2);
+
+/* Astronomy/EclipticCoordinates */
+void tinymoon_erfa_Eceq06(double date1, double date2, double dl, double db,
+               double *dr, double *dd);
+void tinymoon_erfa_Ecm06(double date1, double date2, double rm[3][3]);
+void tinymoon_erfa_Eqec06(double date1, double date2, double dr, double dd,
+               double *dl, double *db);
+void tinymoon_erfa_Lteceq(double epj, double dl, double db, double *dr, double *dd);
+void tinymoon_erfa_Ltecm(double epj, double rm[3][3]);
+void tinymoon_erfa_Lteqec(double epj, double dr, double dd, double *dl, double *db);
+
+/* Astronomy/GalacticCoordinates */
+void tinymoon_erfa_G2icrs(double dl, double db, double *dr, double *dd);
+void tinymoon_erfa_Icrs2g(double dr, double dd, double *dl, double *db);
+
+/* Astronomy/GeodeticGeocentric */
+int tinymoon_erfa_Eform(int n, double *a, double *f);
+int tinymoon_erfa_Gc2gd(int n, double xyz[3],
+             double *elong, double *phi, double *height);
+int tinymoon_erfa_Gc2gde(double a, double f, double xyz[3],
+              double *elong, double *phi, double *height);
+int tinymoon_erfa_Gd2gc(int n, double elong, double phi, double height,
+             double xyz[3]);
+int tinymoon_erfa_Gd2gce(double a, double f,
+              double elong, double phi, double height, double xyz[3]);
+
+/* Astronomy/Timescales */
+int tinymoon_erfa_D2dtf(const char *scale, int ndp, double d1, double d2,
+             int *iy, int *im, int *id, int ihmsf[4]);
+int tinymoon_erfa_Dat(int iy, int im, int id, double fd, double *deltat);
+double tinymoon_erfa_Dtdb(double date1, double date2,
+               double ut, double elong, double u, double v);
+int tinymoon_erfa_Dtf2d(const char *scale, int iy, int im, int id,
+             int ihr, int imn, double sec, double *d1, double *d2);
+int tinymoon_erfa_Taitt(double tai1, double tai2, double *tt1, double *tt2);
+int tinymoon_erfa_Taiut1(double tai1, double tai2, double dta,
+              double *ut11, double *ut12);
+int tinymoon_erfa_Taiutc(double tai1, double tai2, double *utc1, double *utc2);
+int tinymoon_erfa_Tcbtdb(double tcb1, double tcb2, double *tdb1, double *tdb2);
+int tinymoon_erfa_Tcgtt(double tcg1, double tcg2, double *tt1, double *tt2);
+int tinymoon_erfa_Tdbtcb(double tdb1, double tdb2, double *tcb1, double *tcb2);
+int tinymoon_erfa_Tdbtt(double tdb1, double tdb2, double dtr,
+             double *tt1, double *tt2);
+int tinymoon_erfa_Tttai(double tt1, double tt2, double *tai1, double *tai2);
+int tinymoon_erfa_Tttcg(double tt1, double tt2, double *tcg1, double *tcg2);
+int tinymoon_erfa_Tttdb(double tt1, double tt2, double dtr,
+             double *tdb1, double *tdb2);
+int tinymoon_erfa_Ttut1(double tt1, double tt2, double dt,
+             double *ut11, double *ut12);
+int tinymoon_erfa_Ut1tai(double ut11, double ut12, double dta,
+              double *tai1, double *tai2);
+int tinymoon_erfa_Ut1tt(double ut11, double ut12, double dt,
+             double *tt1, double *tt2);
+int tinymoon_erfa_Ut1utc(double ut11, double ut12, double dut1,
+              double *utc1, double *utc2);
+int tinymoon_erfa_Utctai(double utc1, double utc2, double *tai1, double *tai2);
+int tinymoon_erfa_Utcut1(double utc1, double utc2, double dut1,
+              double *ut11, double *ut12);
+
+/* Astronomy/HorizonEquatorial */
+void tinymoon_erfa_Ae2hd(double az, double el, double phi,
+              double *ha, double *dec);
+void tinymoon_erfa_Hd2ae(double ha, double dec, double phi,
+              double *az, double *el);
+double tinymoon_erfa_Hd2pa(double ha, double dec, double phi);
+
+/* Astronomy/Gnomonic */
+int tinymoon_erfa_Tpors(double xi, double eta, double a, double b,
+             double *a01, double *b01, double *a02, double *b02);
+int tinymoon_erfa_Tporv(double xi, double eta, double v[3],
+             double v01[3], double v02[3]);
+void tinymoon_erfa_Tpsts(double xi, double eta, double a0, double b0,
+              double *a, double *b);
+void tinymoon_erfa_Tpstv(double xi, double eta, double v0[3], double v[3]);
+int tinymoon_erfa_Tpxes(double a, double b, double a0, double b0,
+             double *xi, double *eta);
+int tinymoon_erfa_Tpxev(double v[3], double v0[3], double *xi, double *eta);
+
+/* VectorMatrix/AngleOps */
+void tinymoon_erfa_A2af(int ndp, double angle, char *sign, int idmsf[4]);
+void tinymoon_erfa_A2tf(int ndp, double angle, char *sign, int ihmsf[4]);
+int tinymoon_erfa_Af2a(char s, int ideg, int iamin, double asec, double *rad);
+double tinymoon_erfa_Anp(double a);
+double tinymoon_erfa_Anpm(double a);
+void tinymoon_erfa_D2tf(int ndp, double days, char *sign, int ihmsf[4]);
+int tinymoon_erfa_Tf2a(char s, int ihour, int imin, double sec, double *rad);
+int tinymoon_erfa_Tf2d(char s, int ihour, int imin, double sec, double *days);
+
+/* VectorMatrix/BuildRotations */
+void tinymoon_erfa_Rx(double phi, double r[3][3]);
+void tinymoon_erfa_Ry(double theta, double r[3][3]);
+void tinymoon_erfa_Rz(double psi, double r[3][3]);
+
+/* VectorMatrix/CopyExtendExtract */
+void tinymoon_erfa_Cp(double p[3], double c[3]);
+void tinymoon_erfa_Cpv(double pv[2][3], double c[2][3]);
+void tinymoon_erfa_Cr(double r[3][3], double c[3][3]);
+void tinymoon_erfa_P2pv(double p[3], double pv[2][3]);
+void tinymoon_erfa_Pv2p(double pv[2][3], double p[3]);
+
+/* VectorMatrix/Initialization */
+void tinymoon_erfa_Ir(double r[3][3]);
+void tinymoon_erfa_Zp(double p[3]);
+void tinymoon_erfa_Zpv(double pv[2][3]);
+void tinymoon_erfa_Zr(double r[3][3]);
+
+/* VectorMatrix/MatrixOps */
+void tinymoon_erfa_Rxr(double a[3][3], double b[3][3], double atb[3][3]);
+void tinymoon_erfa_Tr(double r[3][3], double rt[3][3]);
+
+/* VectorMatrix/MatrixVectorProducts */
+void tinymoon_erfa_Rxp(double r[3][3], double p[3], double rp[3]);
+void tinymoon_erfa_Rxpv(double r[3][3], double pv[2][3], double rpv[2][3]);
+void tinymoon_erfa_Trxp(double r[3][3], double p[3], double trp[3]);
+void tinymoon_erfa_Trxpv(double r[3][3], double pv[2][3], double trpv[2][3]);
+
+/* VectorMatrix/RotationVectors */
+void tinymoon_erfa_Rm2v(double r[3][3], double w[3]);
+void tinymoon_erfa_Rv2m(double w[3], double r[3][3]);
+
+/* VectorMatrix/SeparationAndAngle */
+double tinymoon_erfa_Pap(double a[3], double b[3]);
+double tinymoon_erfa_Pas(double al, double ap, double bl, double bp);
+double tinymoon_erfa_Sepp(double a[3], double b[3]);
+double tinymoon_erfa_Seps(double al, double ap, double bl, double bp);
+
+/* VectorMatrix/SphericalCartesian */
+void tinymoon_erfa_C2s(double p[3], double *theta, double *phi);
+void tinymoon_erfa_P2s(double p[3], double *theta, double *phi, double *r);
+void tinymoon_erfa_Pv2s(double pv[2][3],
+             double *theta, double *phi, double *r,
+             double *td, double *pd, double *rd);
+void tinymoon_erfa_S2c(double theta, double phi, double c[3]);
+void tinymoon_erfa_S2p(double theta, double phi, double r, double p[3]);
+void tinymoon_erfa_S2pv(double theta, double phi, double r,
+             double td, double pd, double rd,
+             double pv[2][3]);
+
+/* VectorMatrix/VectorOps */
+double tinymoon_erfa_Pdp(double a[3], double b[3]);
+double tinymoon_erfa_Pm(double p[3]);
+void tinymoon_erfa_Pmp(double a[3], double b[3], double amb[3]);
+void tinymoon_erfa_Pn(double p[3], double *r, double u[3]);
+void tinymoon_erfa_Ppp(double a[3], double b[3], double apb[3]);
+void tinymoon_erfa_Ppsp(double a[3], double s, double b[3], double apsb[3]);
+void tinymoon_erfa_Pvdpv(double a[2][3], double b[2][3], double adb[2]);
+void tinymoon_erfa_Pvm(double pv[2][3], double *r, double *s);
+void tinymoon_erfa_Pvmpv(double a[2][3], double b[2][3], double amb[2][3]);
+void tinymoon_erfa_Pvppv(double a[2][3], double b[2][3], double apb[2][3]);
+void tinymoon_erfa_Pvu(double dt, double pv[2][3], double upv[2][3]);
+void tinymoon_erfa_Pvup(double dt, double pv[2][3], double p[3]);
+void tinymoon_erfa_Pvxpv(double a[2][3], double b[2][3], double axb[2][3]);
+void tinymoon_erfa_Pxp(double a[3], double b[3], double axb[3]);
+void tinymoon_erfa_S2xpv(double s1, double s2, double pv[2][3], double spv[2][3]);
+void tinymoon_erfa_Sxp(double s, double p[3], double sp[3]);
+void tinymoon_erfa_Sxpv(double s, double pv[2][3], double spv[2][3]);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif
+
+
+/*----------------------------------------------------------------------
+**
+**
+**  Copyright (C) 2013-2023, NumFOCUS Foundation.
+**  All rights reserved.
+**
+**  This library is derived, with permission, from the International
+**  Astronomical Union's "Standards of Fundamental Astronomy" library,
+**  available from http://www.iausofa.org.
+**
+**  The ERFA version is intended to retain identical functionality to
+**  the SOFA library, but made distinct through different function and
+**  file names, as set out in the SOFA license conditions.  The SOFA
+**  original has a role as a reference standard for the IAU and IERS,
+**  and consequently redistribution is permitted only in its unaltered
+**  state.  The ERFA version is not subject to this restriction and
+**  therefore can be included in distributions which do not support the
+**  concept of "read only" software.
+**
+**  Although the intent is to replicate the SOFA API (other than
+**  replacement of prefix names) and results (with the exception of
+**  bugs;  any that are discovered will be fixed), SOFA is not
+**  responsible for any errors found in this version of the library.
+**
+**  If you wish to acknowledge the SOFA heritage, please acknowledge
+**  that you are using a library derived from SOFA, rather than SOFA
+**  itself.
+**
+**
+**  TERMS AND CONDITIONS
+**
+**  Redistribution and use in source and binary forms, with or without
+**  modification, are permitted provided that the following conditions
+**  are met:
+**
+**  1 Redistributions of source code must retain the above copyright
+**    notice, this list of conditions and the following disclaimer.
+**
+**  2 Redistributions in binary form must reproduce the above copyright
+**    notice, this list of conditions and the following disclaimer in
+**    the documentation and/or other materials provided with the
+**    distribution.
+**
+**  3 Neither the name of the Standards Of Fundamental Astronomy Board,
+**    the International Astronomical Union nor the names of its
+**    contributors may be used to endorse or promote products derived
+**    from this software without specific prior written permission.
+**
+**  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+**  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+**  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+**  FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE
+**  COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+**  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+**  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+**  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+**  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+**  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+**  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+**  POSSIBILITY OF SUCH DAMAGE.
+**
+*/
