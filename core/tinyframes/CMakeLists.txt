@@ -1,0 +1,67 @@
+cmake_minimum_required(VERSION 3.21)
+project(tinyframes VERSION 0.1.0 LANGUAGES C)
+include(../../cmake/TinyNadirModule.cmake)
+tinynadir_add_module(NAME tinyframes SOURCES
+    src/tinyframes.c
+    src/erfa_anp.c
+    src/erfa_anpm.c
+    src/erfa_bi00.c
+    src/erfa_bp00.c
+    src/erfa_bpn2xy.c
+    src/erfa_c2i00b.c
+    src/erfa_c2i06a.c
+    src/erfa_c2ibpn.c
+    src/erfa_c2ixy.c
+    src/erfa_c2ixys.c
+    src/erfa_c2t00b.c
+    src/erfa_c2t06a.c
+    src/erfa_c2tcio.c
+    src/erfa_cp.c
+    src/erfa_cr.c
+    src/erfa_eqeq94.c
+    src/erfa_era00.c
+    src/erfa_fad03.c
+    src/erfa_fae03.c
+    src/erfa_faf03.c
+    src/erfa_faju03.c
+    src/erfa_fal03.c
+    src/erfa_falp03.c
+    src/erfa_fama03.c
+    src/erfa_fame03.c
+    src/erfa_faom03.c
+    src/erfa_fapa03.c
+    src/erfa_fasa03.c
+    src/erfa_faur03.c
+    src/erfa_fave03.c
+    src/erfa_fw2m.c
+    src/erfa_gmst82.c
+    src/erfa_ir.c
+    src/erfa_numat.c
+    src/erfa_nut00a.c
+    src/erfa_nut00b.c
+    src/erfa_nut06a.c
+    src/erfa_nut80.c
+    src/erfa_nutm80.c
+    src/erfa_obl06.c
+    src/erfa_obl80.c
+    src/erfa_pfw06.c
+    src/erfa_pmat76.c
+    src/erfa_pn00.c
+    src/erfa_pn00b.c
+    src/erfa_pnm00b.c
+    src/erfa_pnm06a.c
+    src/erfa_pnm80.c
+    src/erfa_pom00.c
+    src/erfa_pr00.c
+    src/erfa_prec76.c
+    src/erfa_rx.c
+    src/erfa_rxr.c
+    src/erfa_ry.c
+    src/erfa_rz.c
+    src/erfa_s00.c
+    src/erfa_s06.c
+    src/erfa_sp00.c
+    TEST_SOURCES tests/test_tinyframes.c)
+if(TINYFRAMES_INSTALL)
+    install(FILES ERFA-LICENSE.txt DESTINATION "${CMAKE_INSTALL_DATADIR}/doc/tinyframes")
+endif()

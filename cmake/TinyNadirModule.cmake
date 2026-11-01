@@ -1,5 +1,6 @@
 include_guard(GLOBAL)
 include(CMakeParseArguments)
+include("${CMAKE_CURRENT_LIST_DIR}/TinyNadirModules.cmake")
 
 # tinynadir_add_module(NAME tinyfoo SOURCES src/tinyfoo.c
 #                      [DEPENDS tinybar] [TEST_SOURCES tests/test_tinyfoo.c])
@@ -13,7 +14,8 @@ function(_tinynadir_add_module)
     endif()
     foreach(dep IN LISTS M_DEPENDS)
         if(NOT TARGET ${dep}::${dep})
-            if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../${dep}/CMakeLists.txt")
+            tinynadir_module_directory(${dep} _dependency_source)
+            if(NOT EXISTS "${_dependency_source}/CMakeLists.txt")
                 message(FATAL_ERROR "${M_NAME} requires the ${dep} module")
             endif()
             if(dep STREQUAL "tinysgp4")
@@ -22,7 +24,7 @@ function(_tinynadir_add_module)
                 set(TGP4_BUILD_TESTS OFF)
                 set(TGP4_BUILD_EXAMPLES OFF)
             endif()
-            add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/../${dep}"
+            add_subdirectory("${_dependency_source}"
                 "${CMAKE_CURRENT_BINARY_DIR}/dependencies/${dep}")
         endif()
     endforeach()
@@ -79,9 +81,10 @@ function(_tinynadir_add_module)
         add_test(NAME ${M_NAME}.regression COMMAND ${M_NAME}_test)
         set_tests_properties(${M_NAME}.regression PROPERTIES WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
         if(CMAKE_NM AND NOT MSVC)
+            tinynadir_module_directory(tinysgp4 _sgp4_source)
             add_test(NAME ${M_NAME}.no_heap COMMAND "${CMAKE_COMMAND}"
                 "-DNM=${CMAKE_NM}" "-DARCHIVE=$<TARGET_FILE:${M_NAME}>"
-                -P "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../tinysgp4/cmake/CheckNoHeap.cmake")
+                -P "${_sgp4_source}/cmake/CheckNoHeap.cmake")
         endif()
     else()
         set(_tinynadir_module_tests_enabled FALSE PARENT_SCOPE)

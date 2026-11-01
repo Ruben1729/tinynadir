@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.21)
 project(tinynadir VERSION 0.1.0 LANGUAGES C)
+include(cmake/TinyNadirModules.cmake)
 
 set(TINYNADIR_MODULES "all" CACHE STRING "all, or a semicolon-separated list of modules to build (plus required dependencies)")
 function(tinynadir_module_selected name result)
@@ -39,13 +40,12 @@ if(TINYNADIR_BUILD_TINYSGP4 AND _sgp4_selected)
     if(TGP4_BUILD_TESTS)
         enable_testing()
     endif()
-    add_subdirectory(tinysgp4)
+    add_subdirectory(orbit/tinysgp4)
 endif()
 
-# Modules are registered here after their independent comparison and offline
-# regression tests pass. Additional modules are never mandatory dependencies
-# of tinysgp4.
-set(TINYNADIR_AVAILABLE_MODULES tinysgp4 tinylinalg tinystumpff tinyanomaly tinytime tinyrotation tinytriad tinydavenport tinyquest tinyigrf tinyeop tinyinterpolation tinyrk4 tinyrkf45 tinykepler tinyelements tinygeodesy tinythirdbody tinyexponential tinydrag tinysrp tinygravity tinyframes tinysun tinymoon tinygyro tinycalibration tinypd tinymagnetic tinyhills tinygibbs tinyherrickgibbs tinyhohmann tinyplanechange tinyephemeris tinycowell tinybdot tinypid tinywheels tinydesaturation tinyrigidbody tinydisturbance tinyslew tinyguidance tinyspaceweather tinypolynomial tinycomplementary tinydtm tinymsis tinyshadow tinymekf tinytle tinyelliptic tinylambert tinyobservations tinycovariance tinyunscented tinybatchls tinypkepler tinycoverage tinyomm tinyrendezvous tinysecular tinygauss tinylaplace tinymeanosculating tinydoubler tinysgp4fit)
+# Groups organize the checkout; only selected algorithms and their actual
+# dependencies are built. Public target and package names stay per algorithm.
+tinynadir_group_modules(all TINYNADIR_AVAILABLE_MODULES)
 foreach(_module IN LISTS TINYNADIR_AVAILABLE_MODULES)
     if(_module STREQUAL "tinysgp4")
         continue()
@@ -54,7 +54,8 @@ foreach(_module IN LISTS TINYNADIR_AVAILABLE_MODULES)
     option(TINYNADIR_BUILD_${_upper} "Build the ${_module} module" ON)
     tinynadir_module_selected(${_module} _selected)
     if(_selected AND TINYNADIR_BUILD_${_upper} AND NOT TARGET ${_module}::${_module})
-        add_subdirectory(${_module})
+        tinynadir_module_directory(${_module} _module_source)
+        add_subdirectory("${_module_source}" "${_module}")
     endif()
 endforeach()
 if(TINYNADIR_BUILD_EXAMPLES)
