@@ -1,0 +1,6 @@
+tinyanomaly is an independent implementation of published mathematical formulas.
+No Vallado/AGPL source was translated or included.
+Static expected values were captured from mpmath 1.4.1 at 90 decimal digits.
+mpmath reference source, scripts, raw outputs, and executables are retained only
+in the ignored .validation/tinyanomaly/ directory; none are runtime dependencies.
+mpmath is BSD licensed: https://github.com/mpmath/mpmath
