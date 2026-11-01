@@ -1,0 +1,3 @@
+tinyinterpolation is an independently written MIT implementation from published mathematics.
+No reference library source is linked into the runtime.
+Frozen seeded cases compare NumPy interpolation and SciPy BarycentricInterpolator/CubicHermiteSpline, including derivatives. Relative-to-max(1, expected) limits: 2e-12 linear/Hermite, 2e-11 Lagrange. Source references: https://docs.scipy.org/doc/scipy/reference/interpolate.html and https://numpy.org/doc/stable/reference/generated/numpy.interp.html . Reference versions are recorded in tests/data/reference.h.
