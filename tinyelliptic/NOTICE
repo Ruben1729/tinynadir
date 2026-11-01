@@ -1,0 +1,5 @@
+tinyelliptic independently implements the Carlson duplication identities for
+real symmetric elliptic integrals and the published Legendre transformations.
+No SciPy, NumPy, Numerical Recipes, or Vallado source is included.
+Frozen independent numerical outputs use SciPy 1.18.1 special functions
+and optimization/integration routines as described in README.md.
