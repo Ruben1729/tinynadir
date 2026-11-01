@@ -1,0 +1,4 @@
+tinygyro is an independently written implementation of published mathematical
+models. No SciPy, NumPy, AHRS, Basilisk, or Vallado source is included.
+Frozen test fixtures are numerical outputs from the independent reference
+calculations and versions documented in README.md.
