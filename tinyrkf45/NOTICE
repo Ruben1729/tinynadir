@@ -1,0 +1,3 @@
+tinyrkf45 is an independently written MIT implementation from published mathematics.
+No reference library source is linked into the runtime.
+Independent SciPy DOP853 solutions of decay, oscillator and Lorenz systems are frozen into offline tests. Tested with absolute/relative local tolerances 1e-13, against reference-state tolerances 2e-9 scaled by max(1, expected). Tests exercise rejected/work-limited integrations, callback failures, invalid workspace and zero spans. Versions/cases and observed errors recorded in ignored reference outputs. Reference: https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.solve_ivp.html .
