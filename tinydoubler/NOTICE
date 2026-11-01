@@ -1,0 +1,5 @@
+tinydoubler independently implements two-radius Newton angles-only orbit
+determination using sight-line/radius intersections, coplanarity, conic
+time-of-flight residuals, and the Gibbs velocity relation. It is not a
+Gauss alias. No Vallado/SciPy/NumPy source is copied. Reference implementations
+are used only in ignored development comparisons; provenance in README.md.
