@@ -1,0 +1,13 @@
+tinyeop independently implements bounded linear/local cubic interpolation of
+caller-supplied Earth-orientation and X/Y/s tables. TinyNadir contributions
+are MIT licensed; no NumPy, Vallado or IERS implementation code/data archive
+is included. Real Earth-orientation inputs are supplied by the application.
+
+Independent numerical validation used NumPy 2.5.4 interp and Polynomial.fit
+on synthetic fields. Reference packages/generators/raw results remain in
+ignored .validation/; only numeric reference fixtures are retained in tests/data/.
+The UT1-TAI storage convention avoids interpolating a leap-second jump;
+see README.md for conversion to/from source DUT1 and query-time offsets.
+
+References: https://www.iers.org/IERS/EN/DataProducts/EarthOrientationData/eop.html
+            https://numpy.org/doc/stable/reference/generated/numpy.interp.html

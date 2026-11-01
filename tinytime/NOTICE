@@ -1,0 +1,13 @@
+tinytime is an independent C99 implementation of standard proleptic Gregorian,
+Julian-date and astronomical time-offset arithmetic. TinyNadir contributions
+are MIT licensed; no ERFA/SOFA or Vallado implementation source is included.
+
+Independent numerical validation used pyerfa 2.0.1.5 (ERFA/SOFA cal2jd/dtdb)
+and NumPy 2.5.4. The TT-to-TDB function is the documented geocentric two-term
+approximation, not the complete ERFA dtdb model. See README.md for supported
+scales, ranges, comparison errors and the uniform-day/leap-second contract.
+Reference packages/generators/raw results remain in ignored .validation/;
+only numeric reference fixtures are retained in tests/data/.
+
+References: https://www.iausofa.org/current-software
+            https://github.com/liberfa/erfa
