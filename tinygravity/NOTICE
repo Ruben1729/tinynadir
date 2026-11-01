@@ -1,0 +1,3 @@
+tinygravity is an independently written MIT implementation from published mathematics.
+No reference library source is linked into the runtime.
+Frozen cases compare an independently written Cartesian-derivative implementation with the pinned Vallado Python Montenbruck gravity oracle, used only outside git. Cases span central gravity and normalized synthetic harmonic fields through degree32; SI acceleration tolerance 3e-11 m/s2. Exact polar J2 and coefficient-normalization tests exercise physical limiting cases. The runtime contains no Vallado source. Oracle repository: https://github.com/CelesTrak/fundamentals-of-astrodynamics/tree/49df0479c950917c0a2c5ac31f2db6477bba57f6 .
