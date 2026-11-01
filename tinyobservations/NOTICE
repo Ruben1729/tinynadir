@@ -1,0 +1,8 @@
+tinyobservations independently implements spherical and observer geometry.
+Frozen reference outputs use Skyfield 1.55 (MIT), pymap3d 3.2.0 (BSD), and
+mpmath 1.4.1 (BSD) high-precision derivatives. Vallado Python outputs are retained
+only for raw comparison in ignored .validation/tinyobservations/.
+No upstream software source was translated or included.
+https://github.com/skyfielders/python-skyfield
+https://github.com/geospace-code/pymap3d
+https://github.com/mpmath/mpmath
