@@ -1,0 +1,40 @@
+tinymsis adapts the NRLMSISE-00 model by Mike Picone, Alan Hedin, and Doug Drob
+(Naval Research Laboratory), and the C implementation by Dominik Brodowski.
+Original C source: https://git.linta.de/~brodo/nrlmsise-00.git/
+Commit: bc9a2feba4344e74201281e563332688a4d09cc3 (2019-07-09).
+The original C/data authorship comments are retained in adapted source files.
+
+TinyNadir changes: caller-owned context replaces mutable globals; coefficient
+arrays const; coefficient clipping is local rather than a table mutation;
+spline allocation replaced with bounded stack scratch; diagnostic I/O removed;
+private symbol prefixes and an SI, validated-input wrapper. Pressure-to-altitude
+inversion is excluded from the selected altitude-input profile.
+TinyNadir's new wrapper/adaptations are MIT licensed (LICENSE).
+
+The following upstream public-domain statement is preserved from
+https://github.com/st-bender/pynrlmsise00/blob/master/COPYING.NRLMSISE-00 :
+
+    I am placing my NRLMSISE-00 C code into the public domain
+    contingent on the original Fortran code not being subject
+    to US copyright.
+
+The original Fortran code states the following:
+
+    %The source code is in the public domain and not licensed or under
+    %copyright. The information and software may be used freely by the public.
+    %As required by 17 U.S.C. 403, third parties producing copyrighted works
+    %consisting predominantly of the material produced by U.S. government
+    %agencies must provide notice with such work(s) identifying the U.S.
+    %Government material incorporated and stating that such material is not
+    %subject to copyright protection.
+    %
+    %Derived works shall not identify themselves in a manner that implies an
+    %endorsement by or an affiliation with the Naval Research Laboratory.
+    %
+    %RECIPIENT BEARS ALL RISK RELATING TO QUALITY AND PERFORMANCE OF THE
+    %SOFTWARE AND ANY RELATED MATERIALS, AND AGREES TO INDEMNIFY THE NAVAL
+    %RESEARCH LABORATORY FOR ALL THIRD-PARTY CLAIMS RESULTING FROM THE ACTIONS
+    %OF RECIPIENT IN THE USE OF THE SOFTWARE.
+
+This library is not endorsed by or affiliated with NRL or the US Navy.
+NRLMSISE-00 identifies the implemented model; no later NRLMSIS 2.x model is included.
