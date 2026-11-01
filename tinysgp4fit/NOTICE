@@ -1,0 +1,12 @@
+tinysgp4fit is an independently written composition of TinyNadir's bounded
+least-squares solver and permitted SGP4 public APIs. No AGPL SGP4DC source
+was translated or included.
+
+Independent oracle: SciPy 1.18.1 least_squares(method=LM) and python-sgp4 2.27
+compiled C++ SGP4, WGS72 improved mode. SciPy is BSD licensed; python-sgp4
+is MIT licensed with the original SGP4 attribution. Only numeric outputs are
+included in static fixtures. Reference code, generators and raw comparisons
+stay ignored in .validation/tinysgp4fit/ and .validation/orbit-env/.
+
+https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.least_squares.html
+https://github.com/brandon-rhodes/python-sgp4
