@@ -1,0 +1,4 @@
+tinygauss independently implements the published classical angles-only
+initial-orbit-determination equations described in README.md. No Vallado,
+SciPy, or NumPy source is copied into the runtime. The pinned Vallado Python
+implementation is used only as an ignored external numeric oracle.
