@@ -1,0 +1,3 @@
+tinyexponential is an independently written MIT implementation from published mathematics.
+No reference library source is linked into the runtime.
+96 layered profiles/altitudes are compared with independent NumPy exponential/table selection and frozen as offline cases. Relative tolerance 2e-14; includes each layer boundary and invalid/out-of-range failures. Mathematical reference: exponential scale-height atmosphere, numerical oracle https://numpy.org/doc/stable/reference/generated/numpy.exp.html .
