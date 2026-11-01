@@ -1,0 +1,5 @@
+tinydavenport independently implements Davenport's published quaternion
+eigenproblem for Wahba's weighted attitude-estimation objective.
+No NumPy, SciPy, AHRS, or Vallado source is included in the runtime.
+Frozen numerical outputs were obtained from SciPy 1.18.1 align_vectors,
+which uses the independent Kabsch/SVD rotation-estimation formulation.
