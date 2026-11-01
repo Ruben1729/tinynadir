@@ -17,6 +17,12 @@ function(_tinynadir_add_module)
             if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../${dep}/CMakeLists.txt")
                 message(FATAL_ERROR "${M_NAME} requires the ${dep} module")
             endif()
+            if(dep STREQUAL "tinysgp4")
+                # The original standalone module uses its historic TGP4 options.
+                set(TGP4_INSTALL ${TINYNADIR_INSTALL})
+                set(TGP4_BUILD_TESTS OFF)
+                set(TGP4_BUILD_EXAMPLES OFF)
+            endif()
             add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/../${dep}"
                 "${CMAKE_CURRENT_BINARY_DIR}/dependencies/${dep}")
         endif()
