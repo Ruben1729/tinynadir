@@ -16,7 +16,9 @@ typedef struct {const char *name;size_t name_length;const char *value;size_t val
    celestrak_defaults=1 explicitly supplies those four GP endpoint defaults.
    Other supplied incompatible metadata/type/version is always rejected.
    Unknown metadata ignored, duplicate known keys rejected. Type0 only.
-   ISO epochs have4digit Gregorian years and optional fractional seconds/Z;
+   ISO epochs have4digit Gregorian years1600..9999 and optional fractional
+   seconds/Z. Decimal input retains19 significant digits, supports scientific
+   notation/subnormals; overflow rejected, tiny underflows become signed zero;
    actual leap seconds(second60) are not accepted by the uniform-day profile.
    Outputs preserved on failure; raw JSON/XML/CSV decoding is outside this API. */
 tinyomm_status tinyomm_parse_fields(const tinyomm_field *fields,size_t count,int celestrak_defaults,tinytle_elements *out);

@@ -3,13 +3,55 @@
 #include "tinytime/tinytime.h"
 #include <math.h>
 #include <stdint.h>
+#include <float.h>
 #include <string.h>
 static int space(char c){return c==' '||c=='\t'||c=='\r';}
 static void trim(const char **s,size_t *n){while(*n&&space(**s)){++*s;--*n;}while(*n&&space((*s)[*n-1]))--*n;if(*n>=2&&((**s=='"'&&(*s)[*n-1]=='"')||(**s=='\''&&(*s)[*n-1]=='\''))){++*s;*n-=2;}}
 static int equal(const char *s,size_t n,const char *text){return strlen(text)==n&&!memcmp(s,text,n);}
-static int number(const char *s,size_t n,double *out){size_t i=0;uint64_t mantissa=0;unsigned kept=0;int sign=1,point=0,seen=0,fraction=0,dropped=0,exponent=0,esign=1;if(!n||n>128)return 0;if(s[i]=='+'||s[i]=='-'){if(s[i]=='-')sign=-1;++i;}for(;i<n;++i){char c=s[i];if(c=='.'&&!point){point=1;continue;}if(c=='e'||c=='E')break;if(c<'0'||c>'9')return 0;seen=1;if(point)++fraction;if(kept<19){mantissa=mantissa*10+(unsigned)(c-'0');++kept;}else ++dropped;}
-    if(!seen)return 0;if(i<n){++i;if(i<n&&(s[i]=='+'||s[i]=='-')){if(s[i]=='-')esign=-1;++i;}if(i==n)return 0;for(;i<n;++i){if(s[i]<'0'||s[i]>'9'||exponent>1000)return 0;exponent=exponent*10+s[i]-'0';}}
-    exponent=esign*exponent-fraction+dropped;if(exponent<-308||exponent>308)return 0;*out=(double)sign*(double)mantissa*pow(10,exponent);return isfinite(*out);
+/* Compare normalized decimal significands, ignoring sign/point/exponent.
+   Inputs have <=128 bytes. Both limit constants continue with nonzero digits
+   beyond their first128 significant digits, so an exhausted matching input
+   (whose remaining digits are zero) is strictly smaller. */
+static int significand_compare(const char *s,size_t n,const char *limit){
+    size_t j=0;int started=0;
+    for(size_t i=0;i<n&&s[i]!='e'&&s[i]!='E';++i){
+        char c=s[i];if(c<'0'||c>'9')continue;
+        if(!started&&c=='0')continue;started=1;
+        if(c!=limit[j])return c<limit[j]?-1:1;
+        ++j;
+    }
+    while(j<128){if(limit[j++]!='0')return -1;}
+    return -1;
+}
+static int number(const char *s,size_t n,double *out){size_t i=0;uint64_t mantissa=0;unsigned kept=0;int sign=1,point=0,seen=0,fraction=0,dropped=0,exponent=0,esign=1,order;if(!n||n>128)return 0;if(s[i]=='+'||s[i]=='-'){if(s[i]=='-')sign=-1;++i;}for(;i<n;++i){char c=s[i];if(c=='.'&&!point){point=1;continue;}if(c=='e'||c=='E')break;if(c<'0'||c>'9')return 0;seen=1;if(point)++fraction;if(kept||c!='0'){if(kept<19){mantissa=mantissa*10+(unsigned)(c-'0');++kept;}else ++dropped;}}
+    if(!seen)return 0;if(i<n){++i;if(i<n&&(s[i]=='+'||s[i]=='-')){if(s[i]=='-')esign=-1;++i;}if(i==n)return 0;for(;i<n;++i){if(s[i]<'0'||s[i]>'9')return 0;if(exponent<10000){exponent=exponent*10+s[i]-'0';if(exponent>10000)exponent=10000;}}}
+    exponent=esign*exponent-fraction+dropped;
+    if(!mantissa){*out=sign<0?-0.0:0.0;return 1;}
+    /* Canonicalize decimal trailing zeros so equivalent spellings use the
+       same scaling path. Scale in chunks to avoid premature power underflow
+       for a finite/subnormal mantissa*10^exponent result. */
+    while(mantissa%10==0){mantissa/=10;++exponent;}
+    /* Exact binary64 overflow and half-minimum-subnormal thresholds. Their
+       decimal significands distinguish range/zero decisions even when a
+       rounded19-digit mantissa falls on the other side of a boundary. */
+    static const char overflow_limit[]="17976931348623158079372897140530341507993413271003782693617377898044496829276475094664901797758720709633028641669288791094655554";
+    static const char half_minimum[]="24703282292062327208828439643411068618252990130716238221279284125033775363510437593264991818081799618989828234772285886546332835";
+    order=exponent;
+    for(uint64_t leading=mantissa;leading>=10;leading/=10)++order;
+    if(order>308||(order==308&&significand_compare(s,n,overflow_limit)>=0))return 0;
+    if(order<-324||(order==-324&&significand_compare(s,n,half_minimum)<0)){*out=sign<0?-0.0:0.0;return 1;}
+    *out=(double)mantissa;
+    if(exponent>256){
+        uint64_t leading=mantissa;double divisor=1;
+        while(leading>=10){leading/=10;divisor*=10;++exponent;}
+        if(exponent>308)return 0;
+        *out/=divisor;
+    }
+    while(exponent<-256){*out*=1e-256;exponent+=256;}
+    *out*=pow(10,exponent);
+    if(!isfinite(*out)&&order==308)*out=DBL_MAX;
+    if(*out==0&&order==-324)*out=0x1p-1074;
+    *out*=sign;return isfinite(*out);
 }
 static int digits(const char *s,size_t n,unsigned *out){unsigned r=0;if(!n||n>9)return 0;for(size_t i=0;i<n;++i){if(s[i]<'0'||s[i]>'9')return 0;r=r*10+(unsigned)(s[i]-'0');}*out=r;return 1;}
 static int epoch(const char *s,size_t n,double *first,double *fraction){unsigned year,month,day,hour,minute;double second;tinytime_jd jd;if(n&&s[n-1]=='Z')--n;if(n<19||n>48||s[4]!='-'||s[7]!='-'||s[10]!='T'||s[13]!=':'||s[16]!=':'||!digits(s,4,&year)||!digits(s+5,2,&month)||!digits(s+8,2,&day)||!digits(s+11,2,&hour)||!digits(s+14,2,&minute)||!number(s+17,n-17,&second))return 0;if(s[17]<'0'||s[17]>'9'||s[18]<'0'||s[18]>'9'||(n>19&&(s[19]!='.'||n==20)))return 0;for(size_t i=20;i<n;++i)if(s[i]<'0'||s[i]>'9')return 0;if(tinytime_calendar_to_jd((int)year,(int)month,(int)day,(int)hour,(int)minute,second,&jd)!=0)return 0;*first=jd.first;*fraction=jd.fraction;return 1;}
