@@ -45,6 +45,7 @@ function(_tinynadir_add_module)
     option(${_upper}_BUILD_TESTS "Build ${M_NAME} static regression tests" ${_test_default})
     option(${_upper}_INSTALL "Install ${M_NAME}" ${_install_default})
     add_library(${M_NAME} STATIC ${M_SOURCES})
+    target_sources(${M_NAME} PRIVATE "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/CheckBinary64.c")
     add_library(${M_NAME}::${M_NAME} ALIAS ${M_NAME})
     set_target_properties(${M_NAME} PROPERTIES C_STANDARD 99 C_STANDARD_REQUIRED YES C_EXTENSIONS NO)
     target_include_directories(${M_NAME} PUBLIC
