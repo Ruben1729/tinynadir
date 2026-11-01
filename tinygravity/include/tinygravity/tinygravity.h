@@ -15,7 +15,8 @@ size_t tinygravity_coefficient_count(unsigned degree);
 size_t tinygravity_workspace_count(unsigned degree);
 tinygravity_status tinygravity_evaluate(double mu_m3_s2,double reference_radius_m,unsigned degree,unsigned order,const double *cosine,const double *sine,size_t coefficient_count,const double position_m[3],double acceleration_m_s2[3],double *potential_m2_s2,double *workspace,size_t workspace_count);
 /* Fully normalized geodesy coefficients -> unnormalized coefficients.
-   Input/output arrays may alias; outputs preserved on invalid input. */
+   Arrays must be disjoint except exact in-place coefficient arrays.
+   Invalid inputs or nonfinite converted products preserve both outputs. */
 tinygravity_status tinygravity_unnormalize(unsigned degree,const double *normalized_c,const double *normalized_s,size_t count,double *c,double *s);
 #ifdef __cplusplus
 }

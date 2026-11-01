@@ -1,4 +1,5 @@
-/* TinyNadir adaptation: private symbol prefix only; ERFA copyright/license below. */
+/* TinyNadir adaptation: private symbol prefix and immutable coefficient-pointer
+ * tables; ERFA copyright/license below. */
 #include "erfa.h"
 #include "erfam.h"
 
@@ -2355,12 +2356,12 @@ int tinysun_erfa_Epv00(double date1, double date2,
       0.2735037220939e-12, 0.6154322683046e+01, 0.5296909721118e+00 };
 
 /* Pointers to coefficient arrays, in x,y,z sets */
-   static const double *ce0[] = { e0x, e0y, e0z },
-                       *ce1[] = { e1x, e1y, e1z },
-                       *ce2[] = { e2x, e2y, e2z },
-                       *cs0[] = { s0x, s0y, s0z },
-                       *cs1[] = { s1x, s1y, s1z },
-                       *cs2[] = { s2x, s2y, s2z };
+   static const double *const ce0[] = { e0x, e0y, e0z },
+                       *const ce1[] = { e1x, e1y, e1z },
+                       *const ce2[] = { e2x, e2y, e2z },
+                       *const cs0[] = { s0x, s0y, s0z },
+                       *const cs1[] = { s1x, s1y, s1z },
+                       *const cs2[] = { s2x, s2y, s2z };
    const double *coeffs;
 
 /* Numbers of terms for each component of the model, in x,y,z sets */

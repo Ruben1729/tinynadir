@@ -16,11 +16,21 @@ static void store(double *w,size_t k,dual a){w[4*k]=a.v;for(size_t j=0;j<3;++j)w
 static dual load(const double *w,size_t k){dual a;a.v=w[4*k];for(size_t j=0;j<3;++j)a.d[j]=w[4*k+1+j];return a;}
 size_t tinygravity_coefficient_count(unsigned n){return n>TINYGRAVITY_MAX_DEGREE?0:((size_t)n+1)*(n+2)/2;}
 size_t tinygravity_workspace_count(unsigned n){return 8*tinygravity_coefficient_count(n);}
+/* Positive integer factorial ratio (n-m)!/(n+m)!. Degree<=32 bounds
+ * the product to at most 64 divisions and keeps it above binary64 underflow.
+ * Avoid lgamma: some platform implementations update shared signgam state. */
+static double normalization(unsigned n,unsigned m){
+    double ratio=1;
+    for(unsigned k=n-m+1;k<=n+m;++k)ratio/=(double)k;
+    return sqrt((m?2.0:1.0)*(2*n+1)*ratio);
+}
 tinygravity_status tinygravity_unnormalize(unsigned degree,const double *nc,const double *ns,size_t count,double *c,double *s){
     size_t required=tinygravity_coefficient_count(degree);
     if(!required||count<required||!nc||!ns||!c||!s||c==s)return TINYGRAVITY_INVALID;
     for(size_t i=0;i<required;++i)if(!isfinite(nc[i])||!isfinite(ns[i]))return TINYGRAVITY_INVALID;
-    for(unsigned n=0;n<=degree;++n)for(unsigned m=0;m<=n;++m){size_t k=index_nm(n,m);double norm=sqrt((m?2.0:1.0)*(2*n+1)*exp(lgamma(n-m+1.0)-lgamma(n+m+1.0)));c[k]=nc[k]*norm;s[k]=ns[k]*norm;}
+    /* Validate all products before the first write, including in-place use. */
+    for(unsigned n=0;n<=degree;++n)for(unsigned m=0;m<=n;++m){size_t k=index_nm(n,m);double norm=normalization(n,m);if(!isfinite(nc[k]*norm)||!isfinite(ns[k]*norm))return TINYGRAVITY_ARITHMETIC;}
+    for(unsigned n=0;n<=degree;++n)for(unsigned m=0;m<=n;++m){size_t k=index_nm(n,m);double norm=normalization(n,m),cv=nc[k]*norm,sv=ns[k]*norm;c[k]=cv;s[k]=sv;}
     return TINYGRAVITY_OK;
 }
 tinygravity_status tinygravity_evaluate(double mu,double radius,unsigned degree,unsigned order,const double *c,const double *s,size_t count,const double r[3],double out[3],double *potential,double *work,size_t work_count){
