@@ -1,0 +1,3 @@
+tinyephemeris is an independently written MIT implementation from published mathematics.
+No reference library source is linked into the runtime.
+96 independent SciPy CubicHermiteSpline vector trajectories and derivatives are frozen. Tests check endpoints, invalid/sorted data, out-of-range requests and failure preservation. Scaled component tolerance3e-13, plus1e-9m/s absolute velocity floor. Oracle: https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.CubicHermiteSpline.html .
