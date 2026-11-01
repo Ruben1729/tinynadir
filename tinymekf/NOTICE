@@ -1,0 +1,5 @@
+tinymekf independently implements multiplicative attitude error-state EKF
+mathematics: covariance prediction, vector innovations, Joseph covariance
+updates, quaternion/bias injection, and error-state covariance reset.
+No FilterPy, SciPy, or Vallado source is included. Reference numerical outputs
+use FilterPy 2.0.0 and SciPy/NumPy as documented in README.md.
