@@ -1,0 +1,6 @@
+tinypkepler is independently implemented from published mathematical methods.
+Vallado Python at commit 49df0479c950917c0a2c5ac31f2db6477bba57f6 was executed
+only as a numerical oracle; no AGPL source was translated or included.
+Raw comparisons, oracle source and generators stay ignored under .validation/.
+Only numerical expected values are retained in static C regression fixtures.
+https://github.com/CelesTrak/fundamentals-of-astrodynamics/tree/49df0479c950917c0a2c5ac31f2db6477bba57f6
