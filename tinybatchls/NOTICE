@@ -1,0 +1,6 @@
+tinybatchls independently implements bounded weighted Levenberg-Marquardt fitting.
+Frozen regression outputs were generated with SciPy 1.18.1 least_squares (LM)
+and NumPy 2.5.4 covariance from analytical model Jacobians, both BSD licensed.
+No reference software source is translated or included. Raw reference outputs
+and generator stay ignored in .validation/tinybatchls/.
+https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.least_squares.html
