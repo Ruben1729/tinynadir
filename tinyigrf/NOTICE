@@ -1,0 +1,13 @@
+tinyigrf code is an independent implementation, MIT licensed (see LICENSE).
+
+The coefficient data in src/coefficients.h are extracted and reformatted from:
+International Association of Geomagnetism and Aeronomy (IAGA), Working Group
+V-MOD (2024), IGRF-14. https://doi.org/10.5281/zenodo.14012302
+Official distribution: https://www.ngdc.noaa.gov/IAGA/vmod/coeffs/igrf14coeffs.txt
+
+The IGRF-14 coefficient release is licensed Creative Commons Attribution 4.0
+International (CC BY 4.0): https://creativecommons.org/licenses/by/4.0/
+Changes: selected the 2025.0 main field and 2025-2030 secular-variation columns,
+reformatted as constant C records, and retained all degrees through 13.
+The data are scientific model coefficients, not newly authored TinyNadir code.
+Retain this attribution and license reference when redistributing the data.
