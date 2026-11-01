@@ -13,4 +13,3 @@ tinytle_status tinytle_initialize_elements(const tinytle_elements *g,tgp4_satell
     if(!tgp4_core_sgp4init('i',&r)||r.error||!isfinite(r.am)||!isfinite(r.nm))return TINYTLE_PROPAGATION_ERROR;
     sat->record=r;sat->initialized=1;return TINYTLE_OK;
 }
-tinytle_status tinytle_initialize(const char *a,size_t na,const char *b,size_t nb,tgp4_satellite *sat){tinytle_elements g;tinytle_status status=tinytle_parse(a,na,b,nb,&g);if(status!=TINYTLE_OK)return status;return tinytle_initialize_elements(&g,sat);}

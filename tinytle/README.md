@@ -9,3 +9,5 @@ Frozen independent python-sgp4/Vallado C++ outputs cover numeric/Alpha-5 ids, ep
 Reference scripts, packages and raw outputs are in ignored `.validation/tinytle/`. Regression fixtures are checked in and run offline without Python or reference libraries.
 
 Epoch-fraction comparisons allow5e-14day (4.32ns): this parser retains the established whole day-of-year conversion order, while python-sgp4 rounds the fraction independently. State comparisons retain their1mm/1e-5m/s limits.
+
+Text parsing, decoded-element initialization and text-to-SGP4 convenience initialization are separate archive objects, so an element-only consumer need not link the unused text parser.
