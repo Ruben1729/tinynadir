@@ -1,0 +1,7 @@
+Independent MIT implementation. No Vallado or poliastro implementation source is incorporated.
+
+Reference comparisons:
+- CelesTrak/fundamentals-of-astrodynamics, revision 49df0479c950917c0a2c5ac31f2db6477bba57f6: Python rendezvous_coplanar, Kepler propagation, universal Lambert solver.
+- poliastro/poliastro, revision 21fd7719e89a7d22b4eac63141a60a7f1b01768c: core/thrust/change_a_inc.py, ideal Edelbaum estimate (MIT).
+
+Edelbaum, T. N., Propulsion Requirements for Controllable Satellites, ARS Journal 31(8), 1961, pp. 1079–1089.
