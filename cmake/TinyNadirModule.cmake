@@ -1,6 +1,5 @@
 include_guard(GLOBAL)
 include(CMakeParseArguments)
-include(GNUInstallDirs)
 
 # tinynadir_add_module(NAME tinyfoo SOURCES src/tinyfoo.c
 #                      [DEPENDS tinybar] [TEST_SOURCES tests/test_tinyfoo.c])
@@ -121,6 +120,10 @@ endfunction()
 
 # enable_testing's directory variable must outlive the implementation function.
 macro(tinynadir_add_module)
+    # Resolve derived install paths in every caller's directory scope. The
+    # helper's global include guard must not hide them from sibling modules or
+    # their subsequent installation of third-party license files.
+    include(GNUInstallDirs)
     _tinynadir_add_module(${ARGV})
     if(_tinynadir_module_tests_enabled)
         enable_testing()
