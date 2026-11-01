@@ -1,0 +1,5 @@
+tinylinalg is an independently written MIT implementation of standard vector,
+matrix, partial-pivoting LU, Cholesky, and cyclic Jacobi algorithms.
+No NumPy, SciPy, LAPACK, or Vallado source is included in the runtime.
+The test fixtures contain numerical outputs obtained from NumPy 2.5.4 and
+SciPy 1.18.1. Their original software is used only during development.
