@@ -1,0 +1,3 @@
+tinythirdbody is an independently written MIT implementation from published mathematics.
+No reference library source is linked into the runtime.
+Independent 90-digit mpmath point-mass gravity differences are frozen for 100 seeded Sun/Moon-like and stress geometries. Scaled acceleration tolerance is 2e-13 relative to max(1e-12, component). Invalid/collision/zero-baseline cases also tested. Reference primitive: https://mpmath.org/doc/current/ .
